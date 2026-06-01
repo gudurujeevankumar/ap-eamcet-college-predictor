@@ -641,7 +641,7 @@ export default function Home() {
                     letterSpacing: "-0.025em",
                   }}
                 >
-                  EAPCET Predictor
+                  EAPCET PREDICTOR
                 </h1>
                 <p
                   style={{
