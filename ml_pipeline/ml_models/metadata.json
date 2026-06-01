@@ -1,0 +1,41 @@
+{
+  "total_training_samples": 402920,
+  "total_colleges": 273,
+  "total_branches": 69,
+  "total_districts": 13,
+  "xgb_cv_roc_auc": 1.0,
+  "lgbm_cv_accuracy": 1.0,
+  "xgb_reg_cv_r2": 0.14478029012680055,
+  "feature_cols": [
+    "student_rank",
+    "rank_normalized",
+    "college_id",
+    "branch_id",
+    "district_id",
+    "type_id",
+    "category_id",
+    "fee",
+    "fee_normalized",
+    "established",
+    "college_age",
+    "closing_rank",
+    "rank_gap",
+    "rank_gap_ratio",
+    "rank_gap_abs_ratio",
+    "is_rank_below_cutoff",
+    "rank_percentile",
+    "cutoff_percentile",
+    "rank_to_cutoff_ratio"
+  ],
+  "reg_feature_cols": [
+    "college_id",
+    "branch_id",
+    "district_id",
+    "type_id",
+    "category_id",
+    "fee",
+    "fee_normalized",
+    "established",
+    "college_age"
+  ]
+}
