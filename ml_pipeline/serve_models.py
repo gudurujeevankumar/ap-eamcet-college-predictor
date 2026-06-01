@@ -59,6 +59,10 @@ async def startup_event():
     encoders = enc
     print("Startup complete. API ready.")
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "API is running"}
+
 @app.post("/predict")
 async def predict(request: PredictRequest):
     if long_df is None:
