@@ -9,6 +9,9 @@ An advanced, highly-accurate College Predictor built specifically for AP EAPCET 
 <br>
 <h2 align="center">📱 Application Showcase</h2>
 <p align="center">
+  <strong>🔥 Live Website: <a href="https://ap-eamcet-college-predictor.vercel.app/">https://ap-eamcet-college-predictor.vercel.app/</a></strong>
+</p>
+<p align="center">
   <img src="docs/screenshots/desktop.png" width="100%" alt="Desktop View">
 </p>
 <br>
