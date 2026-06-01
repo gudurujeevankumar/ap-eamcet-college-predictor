@@ -7,8 +7,14 @@
 An advanced, highly-accurate College Predictor built specifically for AP EAPCET engineering admissions. It leverages real historic cutoff data (2024), dynamic rank-based probability scoring, and a beautiful interactive interface to help students discover their best-fit colleges, branches, and districts.
 
 <br>
+<h2 align="center">📱 Fully Responsive Experience</h2>
 <p align="center">
-  <img src="responsive-showcase.png" alt="Fully Responsive UI across all devices" width="100%">
+  <img src="docs/screenshots/desktop.png" width="100%" alt="Desktop View">
+</p>
+<p align="center">
+  <img src="docs/screenshots/tablet.png" width="48%" alt="Tablet View">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/mobile.png" width="48%" alt="Mobile View">
 </p>
 <br>
 
