@@ -1,0 +1,623 @@
+[
+  {
+    "code": "CSE",
+    "name": "Computer Science & Engineering",
+    "colleges": 216,
+    "avgCutoff": 80806,
+    "minCutoff": 2039,
+    "maxCutoff": 177209,
+    "popularity": 60
+  },
+  {
+    "code": "ECE",
+    "name": "Electronics & Communication Engineering",
+    "colleges": 195,
+    "avgCutoff": 85382,
+    "minCutoff": 3032,
+    "maxCutoff": 177131,
+    "popularity": 57
+  },
+  {
+    "code": "MEC",
+    "name": "Mechanical Engineering",
+    "colleges": 129,
+    "avgCutoff": 108706,
+    "minCutoff": 5094,
+    "maxCutoff": 176634,
+    "popularity": 46
+  },
+  {
+    "code": "CIV",
+    "name": "Civil Engineering",
+    "colleges": 125,
+    "avgCutoff": 113651,
+    "minCutoff": 8224,
+    "maxCutoff": 177452,
+    "popularity": 43
+  },
+  {
+    "code": "EEE",
+    "name": "Electrical & Electronics Engineering",
+    "colleges": 117,
+    "avgCutoff": 92103,
+    "minCutoff": 5068,
+    "maxCutoff": 177710,
+    "popularity": 54
+  },
+  {
+    "code": "CSM",
+    "name": "CSE (AI & ML)",
+    "colleges": 110,
+    "avgCutoff": 69099,
+    "minCutoff": 3759,
+    "maxCutoff": 171826,
+    "popularity": 65
+  },
+  {
+    "code": "CSD",
+    "name": "CS & Design",
+    "colleges": 83,
+    "avgCutoff": 74863,
+    "minCutoff": 4230,
+    "maxCutoff": 177374,
+    "popularity": 63
+  },
+  {
+    "code": "INF",
+    "name": "Information Technology",
+    "colleges": 48,
+    "avgCutoff": 60523,
+    "minCutoff": 6422,
+    "maxCutoff": 161044,
+    "popularity": 70
+  },
+  {
+    "code": "AID",
+    "name": "AI & Data Science",
+    "colleges": 45,
+    "avgCutoff": 89292,
+    "minCutoff": 12872,
+    "maxCutoff": 176029,
+    "popularity": 55
+  },
+  {
+    "code": "CAI",
+    "name": "Computer Science (AI)",
+    "colleges": 44,
+    "avgCutoff": 90270,
+    "minCutoff": 18512,
+    "maxCutoff": 176092,
+    "popularity": 55
+  },
+  {
+    "code": "AIM",
+    "name": "AI & Machine Learning",
+    "colleges": 35,
+    "avgCutoff": 89907,
+    "minCutoff": 10150,
+    "maxCutoff": 176375,
+    "popularity": 55
+  },
+  {
+    "code": "CSC",
+    "name": "Computer Science (Cyber Security)",
+    "colleges": 28,
+    "avgCutoff": 58433,
+    "minCutoff": 3898,
+    "maxCutoff": 146839,
+    "popularity": 71
+  },
+  {
+    "code": "PHM",
+    "name": "Pharmacy",
+    "colleges": 16,
+    "avgCutoff": 139504,
+    "minCutoff": 44335,
+    "maxCutoff": 177155,
+    "popularity": 30
+  },
+  {
+    "code": "CIC",
+    "name": "CS & Info Security",
+    "colleges": 14,
+    "avgCutoff": 68266,
+    "minCutoff": 13570,
+    "maxCutoff": 132453,
+    "popularity": 66
+  },
+  {
+    "code": "PHD",
+    "name": "Pharmaceutical Engineering",
+    "colleges": 11,
+    "avgCutoff": 123627,
+    "minCutoff": 58907,
+    "maxCutoff": 177810,
+    "popularity": 38
+  },
+  {
+    "code": "CAD",
+    "name": "Computer Aided Design",
+    "colleges": 9,
+    "avgCutoff": 47362,
+    "minCutoff": 8227,
+    "maxCutoff": 85008,
+    "popularity": 76
+  },
+  {
+    "code": "CIT",
+    "name": "CS & Information Technology",
+    "colleges": 9,
+    "avgCutoff": 73875,
+    "minCutoff": 15396,
+    "maxCutoff": 119026,
+    "popularity": 63
+  },
+  {
+    "code": "CHE",
+    "name": "Chemical Engineering",
+    "colleges": 8,
+    "avgCutoff": 51650,
+    "minCutoff": 16747,
+    "maxCutoff": 93321,
+    "popularity": 74
+  },
+  {
+    "code": "EVT",
+    "name": "Electric Vehicle Technology",
+    "colleges": 8,
+    "avgCutoff": 117963,
+    "minCutoff": 63497,
+    "maxCutoff": 156631,
+    "popularity": 41
+  },
+  {
+    "code": "AGR",
+    "name": "Agricultural Engineering",
+    "colleges": 7,
+    "avgCutoff": 136562,
+    "minCutoff": 108243,
+    "maxCutoff": 156440,
+    "popularity": 32
+  },
+  {
+    "code": "CSO",
+    "name": "CS & IoT",
+    "colleges": 7,
+    "avgCutoff": 84895,
+    "minCutoff": 15066,
+    "maxCutoff": 167176,
+    "popularity": 58
+  },
+  {
+    "code": "AI",
+    "name": "Artificial Intelligence",
+    "colleges": 7,
+    "avgCutoff": 113919,
+    "minCutoff": 73300,
+    "maxCutoff": 141532,
+    "popularity": 43
+  },
+  {
+    "code": "CSB",
+    "name": "CS & Business Systems",
+    "colleges": 6,
+    "avgCutoff": 34364,
+    "minCutoff": 4716,
+    "maxCutoff": 145189,
+    "popularity": 83
+  },
+  {
+    "code": "MIN",
+    "name": "Mining Engineering",
+    "colleges": 5,
+    "avgCutoff": 140176,
+    "minCutoff": 69110,
+    "maxCutoff": 176662,
+    "popularity": 30
+  },
+  {
+    "code": "CST",
+    "name": "CS & Technology",
+    "colleges": 4,
+    "avgCutoff": 58536,
+    "minCutoff": 25337,
+    "maxCutoff": 117791,
+    "popularity": 71
+  },
+  {
+    "code": "CSW",
+    "name": "CS (Web Technology)",
+    "colleges": 4,
+    "avgCutoff": 48430,
+    "minCutoff": 4013,
+    "maxCutoff": 135563,
+    "popularity": 76
+  },
+  {
+    "code": "EIE",
+    "name": "Electronics & Instrumentation Engineering",
+    "colleges": 3,
+    "avgCutoff": 102568,
+    "minCutoff": 98179,
+    "maxCutoff": 108506,
+    "popularity": 49
+  },
+  {
+    "code": "CS",
+    "name": "Computer Science",
+    "colleges": 3,
+    "avgCutoff": 102755,
+    "minCutoff": 56125,
+    "maxCutoff": 150061,
+    "popularity": 49
+  },
+  {
+    "code": "AUT",
+    "name": "Automobile Engineering",
+    "colleges": 3,
+    "avgCutoff": 126678,
+    "minCutoff": 102546,
+    "maxCutoff": 148963,
+    "popularity": 37
+  },
+  {
+    "code": "CSG",
+    "name": "CS & Gaming",
+    "colleges": 3,
+    "avgCutoff": 118272,
+    "minCutoff": 18416,
+    "maxCutoff": 170860,
+    "popularity": 41
+  },
+  {
+    "code": "EII",
+    "name": "EIE (Industrial)",
+    "colleges": 3,
+    "avgCutoff": 110776,
+    "minCutoff": 106699,
+    "maxCutoff": 114105,
+    "popularity": 45
+  },
+  {
+    "code": "MRB",
+    "name": "Mechatronics & Robotics",
+    "colleges": 3,
+    "avgCutoff": 21360,
+    "minCutoff": 7531,
+    "maxCutoff": 38691,
+    "popularity": 89
+  },
+  {
+    "code": "FDT",
+    "name": "Food Technology",
+    "colleges": 3,
+    "avgCutoff": 111837,
+    "minCutoff": 88895,
+    "maxCutoff": 142954,
+    "popularity": 44
+  },
+  {
+    "code": "DS",
+    "name": "Data Science",
+    "colleges": 2,
+    "avgCutoff": 98815,
+    "minCutoff": 56421,
+    "maxCutoff": 141209,
+    "popularity": 51
+  },
+  {
+    "code": "IOT",
+    "name": "Internet of Things",
+    "colleges": 2,
+    "avgCutoff": 51958,
+    "minCutoff": 48793,
+    "maxCutoff": 55123,
+    "popularity": 74
+  },
+  {
+    "code": "ECA",
+    "name": "ECE (Advanced Communication)",
+    "colleges": 2,
+    "avgCutoff": 150339,
+    "minCutoff": 130273,
+    "maxCutoff": 170405,
+    "popularity": 25
+  },
+  {
+    "code": "CSER",
+    "name": "CSE (Regional)",
+    "colleges": 2,
+    "avgCutoff": 87179,
+    "minCutoff": 82071,
+    "maxCutoff": 92286,
+    "popularity": 56
+  },
+  {
+    "code": "ECT",
+    "name": "ECE (VLSI Technology)",
+    "colleges": 2,
+    "avgCutoff": 59181,
+    "minCutoff": 43486,
+    "maxCutoff": 74875,
+    "popularity": 70
+  },
+  {
+    "code": "BDT",
+    "name": "Big Data Technology",
+    "colleges": 2,
+    "avgCutoff": 111533,
+    "minCutoff": 86577,
+    "maxCutoff": 136488,
+    "popularity": 44
+  },
+  {
+    "code": "PET",
+    "name": "Petrochemical Engineering",
+    "colleges": 2,
+    "avgCutoff": 59263,
+    "minCutoff": 49370,
+    "maxCutoff": 69156,
+    "popularity": 70
+  },
+  {
+    "code": "CBC",
+    "name": "Cyber Security",
+    "colleges": 2,
+    "avgCutoff": 4940,
+    "minCutoff": 3958,
+    "maxCutoff": 5922,
+    "popularity": 98
+  },
+  {
+    "code": "CDA",
+    "name": "Computer Science (Data Analytics)",
+    "colleges": 2,
+    "avgCutoff": 4498,
+    "minCutoff": 3498,
+    "maxCutoff": 5498,
+    "popularity": 98
+  },
+  {
+    "code": "ECES",
+    "name": "ECE (Signal Processing)",
+    "colleges": 2,
+    "avgCutoff": 5087,
+    "minCutoff": 3628,
+    "maxCutoff": 6545,
+    "popularity": 97
+  },
+  {
+    "code": "ECV",
+    "name": "ECE (VLSI Design)",
+    "colleges": 2,
+    "avgCutoff": 5677,
+    "minCutoff": 4491,
+    "maxCutoff": 6863,
+    "popularity": 97
+  },
+  {
+    "code": "MAD",
+    "name": "Mobile Application Development",
+    "colleges": 2,
+    "avgCutoff": 7312,
+    "minCutoff": 6152,
+    "maxCutoff": 8471,
+    "popularity": 96
+  },
+  {
+    "code": "SWE",
+    "name": "Software Engineering",
+    "colleges": 2,
+    "avgCutoff": 12324,
+    "minCutoff": 10547,
+    "maxCutoff": 14100,
+    "popularity": 94
+  },
+  {
+    "code": "GDT",
+    "name": "Geo-Informatics",
+    "colleges": 2,
+    "avgCutoff": 146611,
+    "minCutoff": 126517,
+    "maxCutoff": 166705,
+    "popularity": 27
+  },
+  {
+    "code": "CSBS",
+    "name": "CS & Business Systems",
+    "colleges": 2,
+    "avgCutoff": 77790,
+    "minCutoff": 70869,
+    "maxCutoff": 84711,
+    "popularity": 61
+  },
+  {
+    "code": "EBM",
+    "name": "Electronics & Biomedical",
+    "colleges": 2,
+    "avgCutoff": 79248,
+    "minCutoff": 74609,
+    "maxCutoff": 83886,
+    "popularity": 60
+  },
+  {
+    "code": "MAU",
+    "name": "Mechanical (Automation)",
+    "colleges": 2,
+    "avgCutoff": 103851,
+    "minCutoff": 55422,
+    "maxCutoff": 152280,
+    "popularity": 48
+  },
+  {
+    "code": "MMM",
+    "name": "Mineral & Metallurgical Engineering",
+    "colleges": 2,
+    "avgCutoff": 152104,
+    "minCutoff": 143610,
+    "maxCutoff": 160598,
+    "popularity": 24
+  },
+  {
+    "code": "FDE",
+    "name": "Food Technology",
+    "colleges": 1,
+    "avgCutoff": 67964,
+    "minCutoff": 67964,
+    "maxCutoff": 67964,
+    "popularity": 66
+  },
+  {
+    "code": "PEE",
+    "name": "Petroleum Engineering",
+    "colleges": 1,
+    "avgCutoff": 61232,
+    "minCutoff": 61232,
+    "maxCutoff": 61232,
+    "popularity": 69
+  },
+  {
+    "code": "CBA",
+    "name": "Computer Business Analytics",
+    "colleges": 1,
+    "avgCutoff": 122940,
+    "minCutoff": 122940,
+    "maxCutoff": 122940,
+    "popularity": 39
+  },
+  {
+    "code": "ASE",
+    "name": "Aerospace Engineering",
+    "colleges": 1,
+    "avgCutoff": 39456,
+    "minCutoff": 39456,
+    "maxCutoff": 39456,
+    "popularity": 80
+  },
+  {
+    "code": "BIO",
+    "name": "Biotechnology",
+    "colleges": 1,
+    "avgCutoff": 32107,
+    "minCutoff": 32107,
+    "maxCutoff": 32107,
+    "popularity": 84
+  },
+  {
+    "code": "GIN",
+    "name": "Geo-Informatics",
+    "colleges": 1,
+    "avgCutoff": 26257,
+    "minCutoff": 26257,
+    "maxCutoff": 26257,
+    "popularity": 87
+  },
+  {
+    "code": "IST",
+    "name": "Information Science & Technology",
+    "colleges": 1,
+    "avgCutoff": 13284,
+    "minCutoff": 13284,
+    "maxCutoff": 13284,
+    "popularity": 93
+  },
+  {
+    "code": "NAM",
+    "name": "Naval Architecture & Marine",
+    "colleges": 1,
+    "avgCutoff": 13196,
+    "minCutoff": 13196,
+    "maxCutoff": 13196,
+    "popularity": 93
+  },
+  {
+    "code": "ECM",
+    "name": "Electronics & Computer Engineering",
+    "colleges": 1,
+    "avgCutoff": 30190,
+    "minCutoff": 30190,
+    "maxCutoff": 30190,
+    "popularity": 85
+  },
+  {
+    "code": "CSS",
+    "name": "CS & Systems",
+    "colleges": 1,
+    "avgCutoff": 35208,
+    "minCutoff": 35208,
+    "maxCutoff": 35208,
+    "popularity": 82
+  },
+  {
+    "code": "CSEB",
+    "name": "CSE (Blockchain)",
+    "colleges": 1,
+    "avgCutoff": 111538,
+    "minCutoff": 111538,
+    "maxCutoff": 111538,
+    "popularity": 44
+  },
+  {
+    "code": "RBT",
+    "name": "Robotics Engineering",
+    "colleges": 1,
+    "avgCutoff": 97315,
+    "minCutoff": 97315,
+    "maxCutoff": 97315,
+    "popularity": 51
+  },
+  {
+    "code": "CCC",
+    "name": "Cloud Computing",
+    "colleges": 1,
+    "avgCutoff": 104119,
+    "minCutoff": 104119,
+    "maxCutoff": 104119,
+    "popularity": 48
+  },
+  {
+    "code": "CIA",
+    "name": "CS & AI",
+    "colleges": 1,
+    "avgCutoff": 80125,
+    "minCutoff": 80125,
+    "maxCutoff": 80125,
+    "popularity": 60
+  },
+  {
+    "code": "MMT",
+    "name": "Materials & Metallurgy",
+    "colleges": 1,
+    "avgCutoff": 173083,
+    "minCutoff": 173083,
+    "maxCutoff": 173083,
+    "popularity": 13
+  },
+  {
+    "code": "CN",
+    "name": "Computer Networking",
+    "colleges": 1,
+    "avgCutoff": 59372,
+    "minCutoff": 59372,
+    "maxCutoff": 59372,
+    "popularity": 70
+  },
+  {
+    "code": "MII",
+    "name": "Mining Engineering (Industrial)",
+    "colleges": 1,
+    "avgCutoff": 170168,
+    "minCutoff": 170168,
+    "maxCutoff": 170168,
+    "popularity": 15
+  },
+  {
+    "code": "MET",
+    "name": "Metallurgical Engineering",
+    "colleges": 0,
+    "avgCutoff": 0,
+    "minCutoff": 0,
+    "maxCutoff": 0,
+    "popularity": 0
+  }
+]

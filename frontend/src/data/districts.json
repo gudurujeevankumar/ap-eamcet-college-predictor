@@ -1,0 +1,80 @@
+[
+  {
+    "code": "GTR",
+    "name": "Guntur",
+    "totalBranches": 243,
+    "totalColleges": 45
+  },
+  {
+    "code": "EG",
+    "name": "East Godavari",
+    "totalBranches": 181,
+    "totalColleges": 32
+  },
+  {
+    "code": "KRI",
+    "name": "Krishna",
+    "totalBranches": 174,
+    "totalColleges": 30
+  },
+  {
+    "code": "CTR",
+    "name": "Chittoor",
+    "totalBranches": 192,
+    "totalColleges": 28
+  },
+  {
+    "code": "VSP",
+    "name": "Visakhapatnam",
+    "totalBranches": 156,
+    "totalColleges": 27
+  },
+  {
+    "code": "KDP",
+    "name": "Kadapa",
+    "totalBranches": 97,
+    "totalColleges": 21
+  },
+  {
+    "code": "PKS",
+    "name": "Prakasam",
+    "totalBranches": 86,
+    "totalColleges": 16
+  },
+  {
+    "code": "WG",
+    "name": "West Godavari",
+    "totalBranches": 111,
+    "totalColleges": 15
+  },
+  {
+    "code": "ATP",
+    "name": "Anantapur",
+    "totalBranches": 67,
+    "totalColleges": 15
+  },
+  {
+    "code": "KNL",
+    "name": "Kurnool",
+    "totalBranches": 68,
+    "totalColleges": 15
+  },
+  {
+    "code": "NLR",
+    "name": "Nellore",
+    "totalBranches": 72,
+    "totalColleges": 13
+  },
+  {
+    "code": "VZM",
+    "name": "Vizianagaram",
+    "totalBranches": 84,
+    "totalColleges": 11
+  },
+  {
+    "code": "SKL",
+    "name": "Srikakulam",
+    "totalBranches": 34,
+    "totalColleges": 5
+  }
+]
