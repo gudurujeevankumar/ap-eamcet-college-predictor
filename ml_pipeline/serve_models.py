@@ -105,11 +105,11 @@ async def predict(request: PredictRequest):
             "rankGap": col_row["closing_rank"] - request.rank,
         })
         
-    feat_vecs = np.array(features_list)
+    feat_df = pd.DataFrame(features_list, columns=feature_cols)
     
     # Get predictions
-    probs = models["xgb_clf"].predict_proba(feat_vecs)[:, 1]
-    chances = models["lgbm_clf"].predict(feat_vecs)
+    probs = models["xgb_clf"].predict_proba(feat_df)[:, 1]
+    chances = models["lgbm_clf"].predict(feat_df)
     
     chance_labels = ["low", "medium", "high"]
     
