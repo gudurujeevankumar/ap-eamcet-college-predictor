@@ -41,7 +41,7 @@ import {
   Cell,
 } from "recharts";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 // Custom Brand Icons
 const InstagramIcon = ({ size = 18, color = "currentColor" }) => (
@@ -610,7 +610,7 @@ export default function Home() {
     ]);
     
     // Add Table
-    doc.autoTable({
+    autoTable(doc, {
       startY: 40,
       head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
       body: tableData,
