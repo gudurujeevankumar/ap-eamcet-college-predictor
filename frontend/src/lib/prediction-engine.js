@@ -419,16 +419,12 @@ export async function predict(input) {
     prediction.insight = generateInsight(prediction, input);
     predictions.push(prediction);
   }
-  // Sort by probability (descending)
-  predictions.sort((a, b) => b.probability - a.probability);
+  // Sort by closingRank (ascending: lowest to highest)
+  predictions.sort((a, b) => a.closingRank - b.closingRank);
   // 3. Assemble results dynamically for Best Fit
-  const bestFitChance = predictions
-    .filter((p) => p.chanceLevel === "best-fit")
-    .sort((a, b) => b.probability - a.probability || a.college.fee - b.college.fee);
+  const bestFitChance = predictions.filter((p) => p.chanceLevel === "best-fit");
     
-  const highChance = predictions
-    .filter((p) => p.chanceLevel === "high")
-    .sort((a, b) => b.probability - a.probability || b.scores.collegeReputation - a.scores.collegeReputation);
+  const highChance = predictions.filter((p) => p.chanceLevel === "high");
     
   const mediumChance = predictions.filter((p) => p.chanceLevel === "medium");
   const lowChance = predictions.filter((p) => p.chanceLevel === "low");
