@@ -895,8 +895,8 @@ export default function Home() {
 
           {/* Hero Content */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             className="hero-content"
           >
@@ -959,8 +959,8 @@ export default function Home() {
 
           {/* Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
             className="hero-stats-grid"
           >
@@ -1026,8 +1026,8 @@ export default function Home() {
         }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
           className="glass-card"
           style={{ padding: "32px", boxShadow: "var(--shadow-elevated)" }}
