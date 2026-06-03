@@ -727,32 +727,29 @@ export default function Home() {
       startY: 70, // Start table lower on page 1
       head: [['#', 'College Name', 'Branch', 'Location', 'Fee', 'Cutoff Rank', 'Chance']],
       body: tableData,
-      theme: 'plain', // Very clean theme
+      theme: 'grid', // Clean grid for clear table format
       headStyles: { 
-        fillColor: [248, 250, 252], 
-        textColor: [15, 23, 42], 
+        fillColor: [30, 41, 59], // slate-800 - Premium dark header
+        textColor: [255, 255, 255], 
         fontStyle: 'bold',
-        lineWidth: { bottom: 0.5 },
-        lineColor: [203, 213, 225]
+        lineColor: [30, 41, 59]
       },
       styles: { 
         fontSize: 8, 
         cellPadding: 4, 
-        textColor: [51, 65, 85]
+        textColor: [51, 65, 85],
+        lineColor: [226, 232, 240], // Soft gray borders
+        lineWidth: 0.1
       },
-      alternateRowStyles: { fillColor: [255, 255, 255] },
-      bodyStyles: {
-        lineWidth: { bottom: 0.1 },
-        lineColor: [241, 245, 249]
-      },
+      alternateRowStyles: { fillColor: [248, 250, 252] }, // slate-50 alternate rows
       columnStyles: {
-        0: { halign: 'center', cellWidth: 8 }, // S.No
-        1: { cellWidth: 70 }, // College Name
-        2: { halign: 'center', cellWidth: 15 }, // Branch
-        3: { halign: 'left', cellWidth: 28 }, // District
-        4: { halign: 'right', cellWidth: 18 }, // Fee
-        5: { halign: 'center', cellWidth: 20 }, // Cutoff
-        6: { halign: 'center', fontStyle: 'bold', cellWidth: 22 } // Chance
+        0: { halign: 'center', cellWidth: 'wrap' }, // S.No
+        1: { halign: 'left', cellWidth: 'auto' }, // College Name (auto wraps)
+        2: { halign: 'center', cellWidth: 'wrap' }, // Branch
+        3: { halign: 'left', cellWidth: 'auto' }, // District (auto wraps)
+        4: { halign: 'right', cellWidth: 'wrap' }, // Fee
+        5: { halign: 'center', cellWidth: 'wrap' }, // Cutoff
+        6: { halign: 'center', fontStyle: 'bold', cellWidth: 'wrap' } // Chance
       },
       didParseCell: function(data) {
          if(data.section === 'body' && data.column.index === 6) {
