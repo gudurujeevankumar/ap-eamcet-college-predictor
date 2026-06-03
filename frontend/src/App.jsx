@@ -26,6 +26,7 @@ import {
   Compass,
   CalendarDays,
   Mail,
+  Download,
 } from "lucide-react";
 import {
   BarChart,
@@ -579,6 +580,9 @@ export default function Home() {
           p.college.place?.toLowerCase().includes(q),
       );
     }
+
+    // Sort all predictions by closingRank ascending (lowest rank to highest)
+    predictions.sort((a, b) => a.closingRank - b.closingRank);
 
     return predictions;
   };
@@ -1306,46 +1310,77 @@ export default function Home() {
               ))}
             </div>
 
-            {/* ─── TABS ─── */}
+            {/* ─── TABS AND ACTIONS ─── */}
             <div
-              className="tabs"
               style={{
-                marginBottom: "24px",
-                maxWidth: "500px",
                 display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "24px",
+                flexWrap: "wrap",
+                gap: "16px",
               }}
             >
-              {[
-                {
-                  key: "predictions",
-                  label: "College Predictions",
-                  icon: <GraduationCap size={16} />,
-                },
-                {
-                  key: "analytics",
-                  label: "Analytics",
-                  icon: <BarChart3 size={16} />,
-                },
-                {
-                  key: "counseling",
-                  label: "Counseling Sim",
-                  icon: <CalendarDays size={16} />,
-                },
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  className={`tab ${activeTab === tab.key ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab.key)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "6px",
-                  }}
-                >
-                  {tab.icon} {tab.label}
-                </button>
-              ))}
+              <div
+                className="tabs"
+                style={{
+                  display: "flex",
+                }}
+              >
+                {[
+                  {
+                    key: "predictions",
+                    label: "College Predictions",
+                    icon: <GraduationCap size={16} />,
+                  },
+                  {
+                    key: "analytics",
+                    label: "Analytics",
+                    icon: <BarChart3 size={16} />,
+                  },
+                  {
+                    key: "counseling",
+                    label: "Counseling Sim",
+                    icon: <CalendarDays size={16} />,
+                  },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    className={`tab ${activeTab === tab.key ? "active" : ""}`}
+                    onClick={() => setActiveTab(tab.key)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    {tab.icon} {tab.label}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={() => window.print()}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 16px",
+                  borderRadius: "8px",
+                  border: "1px solid #e2e8f0",
+                  background: "white",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "#0f172a",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.background = "#f8fafc")}
+                onMouseOut={(e) => (e.currentTarget.style.background = "white")}
+              >
+                <Download size={16} style={{ color: "#3b82f6" }} /> Download PDF
+              </button>
             </div>
 
             {/* ─── PREDICTIONS TAB ─── */}
@@ -2281,6 +2316,7 @@ export default function Home() {
                       </thead>
                       <tbody>
                         {[...result.highChance, ...result.mediumChance]
+                          .sort((a, b) => a.closingRank - b.closingRank)
                           .slice(0, 10)
                           .map((p, i) => (
                             <tr
