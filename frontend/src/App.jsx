@@ -592,12 +592,13 @@ export default function Home() {
         }
         @media (max-width: 768px) {
           .hero-stats-grid { display: none !important; }
-          .hero-content { margin-bottom: 16px !important; }
+          .hero-content { margin-bottom: 24px !important; }
           .analysis-stats-grid { grid-template-columns: repeat(2, 1fr); }
           .score-breakdown-grid { grid-template-columns: repeat(3, 1fr); }
           .tabs { flex-wrap: wrap; }
-          .form-section-wrapper { padding: 0 16px !important; margin-top: -32px !important; }
-          .hero-section-wrapper { padding: 24px 16px 32px !important; }
+          .form-section-wrapper { padding: 0 16px !important; margin-top: -24px !important; }
+          .hero-section-wrapper { padding: 24px 16px 48px !important; }
+          .glass-card { background: white !important; }
         }
       `}</style>
       {/* ─── HERO SECTION ─── */}
