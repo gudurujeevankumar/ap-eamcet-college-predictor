@@ -590,7 +590,7 @@ export default function Home() {
     if (!result) return;
     const doc = new jsPDF();
     
-    // Add Branding
+    // Add Branding Header
     doc.setFontSize(18);
     doc.setTextColor(15, 23, 42);
     doc.text("AP EAMCET College Predictor 2026", 14, 22);
@@ -609,7 +609,7 @@ export default function Home() {
       p.chanceLevel.toUpperCase()
     ]);
     
-    // Add Table
+    // Add Table with Footer & Watermark
     autoTable(doc, {
       startY: 40,
       head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
@@ -619,7 +619,28 @@ export default function Home() {
       styles: { fontSize: 9 },
       columnStyles: {
         0: { cellWidth: 100 },
-      }
+      },
+      didDrawPage: function (data) {
+        // Watermark
+        doc.setTextColor(240, 244, 250); // Very light grey/blue
+        doc.setFontSize(50);
+        doc.text("GUDURU JEEVAN KUMAR", 30, 220, { angle: 45 });
+
+        // Footer
+        doc.setFontSize(9);
+        doc.setTextColor(100, 116, 139);
+        const pageSize = doc.internal.pageSize;
+        const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+        
+        // Social Links & Branding
+        doc.text("Developed by Guduru Jeevan Kumar | YouTube: @GuduruJeevanKumar", data.settings.margin.left, pageHeight - 12);
+        doc.text("Link: ap-eamcet-college-predictor.vercel.app", data.settings.margin.left, pageHeight - 7);
+        
+        // Page Number
+        const pageNumber = "Page " + doc.internal.getNumberOfPages();
+        doc.text(pageNumber, pageSize.width - data.settings.margin.right - 15, pageHeight - 10);
+      },
+      margin: { bottom: 25 }
     });
     
     // Save
