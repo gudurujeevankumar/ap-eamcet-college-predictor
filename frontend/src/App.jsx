@@ -464,13 +464,18 @@ function MultiSelect({ options, values, onChange, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    const handleClose = () => setIsOpen(false);
+    document.addEventListener('closeAllDropdowns', handleClose);
     const handleClickOutside = (e) => {
       if (!e.target.closest('.multi-select-container-' + placeholder.replace(/\s+/g, ''))) {
         setIsOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('closeAllDropdowns', handleClose);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [placeholder]);
 
   const toggleOption = (val) => {
@@ -503,7 +508,9 @@ function MultiSelect({ options, values, onChange, placeholder }) {
         }}
         onClick={(e) => {
           e.stopPropagation();
-          setIsOpen(!isOpen);
+          const wasOpen = isOpen;
+          document.dispatchEvent(new CustomEvent('closeAllDropdowns'));
+          if (!wasOpen) setIsOpen(true);
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -1015,7 +1022,7 @@ export default function Home() {
           margin: "24px auto 0",
           padding: "0 24px",
           position: "relative",
-          zIndex: 2,
+          zIndex: 20,
         }}
       >
         <motion.div
@@ -1226,10 +1233,10 @@ export default function Home() {
         <section
           style={{
             maxWidth: "800px",
-            margin: "48px auto 0",
+            margin: "96px auto 0",
             padding: "0 24px",
             position: "relative",
-            zIndex: 2,
+            zIndex: 10,
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "24px" }}>
