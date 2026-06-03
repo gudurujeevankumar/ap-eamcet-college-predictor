@@ -734,11 +734,6 @@ export default function Home() {
         0: { cellWidth: 100 },
       },
       didDrawPage: function (data) {
-        // Watermark
-        doc.setTextColor(240, 244, 250); // Very light grey/blue
-        doc.setFontSize(50);
-        doc.text("GUDURU JEEVAN KUMAR", 30, 220, { angle: 45 });
-
         // Footer
         doc.setFontSize(9);
         doc.setTextColor(100, 116, 139);
