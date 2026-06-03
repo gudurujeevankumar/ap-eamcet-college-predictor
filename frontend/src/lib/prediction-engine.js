@@ -381,7 +381,18 @@ export async function predict(input) {
   }
   // Layer 2: Map predictions back to CollegePrediction objects
   const predictions = [];
-  for (const raw of rawPredictions) {
+  
+  if (rawPredictions.length === 0 && filtered.length > 0) {
+    console.log("Using local scoring engine as fallback...");
+    for (const record of filtered) {
+      const pred = scoreCollege(record, input);
+      if (pred) {
+        pred.insight = generateInsight(pred, input);
+        predictions.push(pred);
+      }
+    }
+  } else {
+    for (const raw of rawPredictions) {
     const record = filtered.find(
       (r) => r.instCode === raw.inst_code && r.branchCode === raw.branch_code,
     );
@@ -437,6 +448,7 @@ export async function predict(input) {
     prediction.insight = generateInsight(prediction, input);
     predictions.push(prediction);
   }
+}
   // Sort by closingRank (ascending: lowest to highest)
   predictions.sort((a, b) => a.closingRank - b.closingRank);
   // 3. Assemble results dynamically for Best Fit
