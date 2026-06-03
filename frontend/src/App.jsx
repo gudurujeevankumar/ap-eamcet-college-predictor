@@ -19,6 +19,7 @@ import {
   X,
   Brain,
   Zap,
+  Shield,
   CheckCircle2,
   Check,
   AlertTriangle,
