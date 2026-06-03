@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
@@ -58,6 +58,14 @@ async def startup_event():
     long_df = long_df_loaded
     encoders = enc
     print("Startup complete. API ready.")
+
+@app.get("/health")
+async def health_check():
+    """
+    Dedicated health-check endpoint for Render keep-alive and uptime monitoring.
+    Returns a minimal text response to avoid "Failed (output too large)" errors on cron-job.org.
+    """
+    return Response(content="OK", media_type="text/plain")
 
 @app.get("/")
 async def root():
