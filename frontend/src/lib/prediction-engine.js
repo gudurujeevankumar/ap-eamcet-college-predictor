@@ -10,10 +10,8 @@ import {
   DISTRICT_NAMES,
 } from "./types";
 
-import cutoffData from "../data/cutoff-data.json";
+let allRecords = null;
 import branchesData from "../data/branches.json";
-
-const allRecords = cutoffData;
 const TOTAL_STUDENTS = 180000; // Approximate AP EAPCET total participants
 
 // ─────────────────────────────────────────────────────────────
@@ -373,6 +371,12 @@ function generateAnalytics(predictions, input, filtered) {
 // ─────────────────────────────────────────────────────────────
 
 export async function predict(input) {
+  if (!allRecords) {
+    console.log("Lazy loading cutoff data...");
+    const data = await import("../data/cutoff-data.json");
+    allRecords = data.default || data;
+  }
+  
   // Layer 1: Rule Engine — Filter
   const filtered = applyRuleEngine(allRecords, input);
   // Call Python ML Backend

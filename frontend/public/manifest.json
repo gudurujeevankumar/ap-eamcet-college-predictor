@@ -1,0 +1,21 @@
+{
+  "short_name": "AP EAMCET",
+  "name": "AP EAMCET College Predictor 2026",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0f172a",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "description": "Predict your exact engineering (B.Tech) and pharmacy colleges in Andhra Pradesh based on your rank, category, and gender."
+}
