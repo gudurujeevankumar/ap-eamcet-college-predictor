@@ -481,9 +481,19 @@ export default function Home() {
   const [visitorCount, setVisitorCount] = useState(null);
 
   useEffect(() => {
-    fetch("https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits/up")
+    const hasVisited = localStorage.getItem("hasVisited_EAPCET");
+    const endpoint = hasVisited 
+      ? "https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits" // Only fetch count
+      : "https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits/up"; // Fetch and increment
+
+    fetch(endpoint)
       .then((res) => res.json())
-      .then((data) => setVisitorCount(data.count + 35)) // Offset existing visitors
+      .then((data) => {
+        setVisitorCount(data.count + 35); // Offset existing visitors
+        if (!hasVisited) {
+          localStorage.setItem("hasVisited_EAPCET", "true");
+        }
+      })
       .catch(() => setVisitorCount(36));
   }, []);
   const [activeChanceFilter, setActiveChanceFilter] = useState("all");
