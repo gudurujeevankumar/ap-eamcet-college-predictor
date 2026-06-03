@@ -40,6 +40,8 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 // Custom Brand Icons
 const InstagramIcon = ({ size = 18, color = "currentColor" }) => (
@@ -581,10 +583,47 @@ export default function Home() {
       );
     }
 
-    // Sort all predictions by closingRank ascending (lowest rank to highest)
-    predictions.sort((a, b) => a.closingRank - b.closingRank);
-
     return predictions;
+  };
+
+  const handleDownloadPDF = () => {
+    if (!result) return;
+    const doc = new jsPDF();
+    
+    // Add Branding
+    doc.setFontSize(18);
+    doc.setTextColor(15, 23, 42);
+    doc.text("AP EAMCET College Predictor 2026", 14, 22);
+    
+    // Add Subtitle & User details
+    doc.setFontSize(11);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Rank: ${rank} | Category: ${category} | Gender: ${gender}`, 14, 32);
+    
+    // Generate Table Data
+    const predictions = getFilteredPredictions();
+    const tableData = predictions.map(p => [
+      p.college.collegeName,
+      p.college.branchCode,
+      p.closingRank,
+      p.chanceLevel.toUpperCase()
+    ]);
+    
+    // Add Table
+    doc.autoTable({
+      startY: 40,
+      head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [59, 130, 246] },
+      styles: { fontSize: 9 },
+      columnStyles: {
+        0: { cellWidth: 100 },
+      }
+    });
+    
+    // Save
+    doc.save(`AP_EAMCET_Predictions_Rank_${rank}.pdf`);
   };
 
   return (
@@ -1361,7 +1400,7 @@ export default function Home() {
               </div>
               
               <button
-                onClick={() => window.print()}
+                onClick={handleDownloadPDF}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -2316,7 +2355,6 @@ export default function Home() {
                       </thead>
                       <tbody>
                         {[...result.highChance, ...result.mediumChance]
-                          .sort((a, b) => a.closingRank - b.closingRank)
                           .slice(0, 10)
                           .map((p, i) => (
                             <tr
