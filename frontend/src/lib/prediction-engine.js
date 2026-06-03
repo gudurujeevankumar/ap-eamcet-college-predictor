@@ -139,9 +139,16 @@ function scoreCollege(record, input) {
   const closingRank = record.cutoffs[cutoffKey];
   if (closingRank === null || closingRank === undefined) return null;
   const rankGap = closingRank - input.rank;
+  
+  // Calculate max budget for fee matching
+  let maxBudget = 0;
+  if (Array.isArray(input.budget) && input.budget.length > 0 && !input.budget.includes("0")) {
+    maxBudget = Math.max(...input.budget.map(r => parseInt(r.split("-")[1], 10) || 0));
+  }
+
   // Calculate individual scores
   const rankSimilarity = calculateRankSimilarity(input.rank, closingRank);
-  const feeMatch = calculateFeeMatch(record.fee, input.budget);
+  const feeMatch = calculateFeeMatch(record.fee, maxBudget);
   const locationMatch = calculateLocationMatch(
     record.district,
     input.district,
@@ -221,11 +228,17 @@ function generateInsight(prediction, input) {
     insight += `Your rank (${input.rank.toLocaleString()}) exceeds the closing rank of ${closingRank.toLocaleString()} by ${Math.abs(rankGap).toLocaleString()} positions. `;
     insight += "Admission unlikely unless seats remain in later rounds. ";
   }
-  if (input.budget > 0) {
-    if (college.fee <= input.budget * 0.7) {
+  
+  let maxBudget = 0;
+  if (Array.isArray(input.budget) && input.budget.length > 0 && !input.budget.includes("0")) {
+    maxBudget = Math.max(...input.budget.map(r => parseInt(r.split("-")[1], 10) || 0));
+  }
+
+  if (maxBudget > 0) {
+    if (college.fee <= maxBudget * 0.7) {
       insight += `Fee ₹${college.fee.toLocaleString()} is well within your budget. `;
-    } else if (college.fee <= input.budget) {
-      insight += `Fee ₹${college.fee.toLocaleString()} fits within your ₹${input.budget.toLocaleString()} budget. `;
+    } else if (college.fee <= maxBudget) {
+      insight += `Fee ₹${college.fee.toLocaleString()} fits within your ₹${maxBudget.toLocaleString()} budget. `;
     }
   }
   if (input.district !== "ALL" && college.district === input.district) {

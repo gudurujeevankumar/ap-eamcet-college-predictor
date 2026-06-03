@@ -669,7 +669,7 @@ export default function Home() {
         gender,
         branch,
         district,
-        budget: parseInt(budget, 10) || 0,
+        budget, // Pass budget as array
         collegeType,
         region: "ALL",
       });
