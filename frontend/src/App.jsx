@@ -720,15 +720,28 @@ export default function Home() {
       p.chanceLevel.toUpperCase()
     ]);
     
-    // Add Table with Header, Footer & Watermark
     autoTable(doc, {
-      startY: 78,
+      startY: 70, // Start table lower on page 1
       head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
       body: tableData,
-      theme: 'grid',
-      headStyles: { fillColor: [15, 23, 42], textColor: 255, fontStyle: 'bold' },
-      alternateRowStyles: { fillColor: [248, 250, 252] },
-      styles: { fontSize: 8, cellPadding: 4, lineColor: [226, 232, 240] },
+      theme: 'plain', // Very clean theme
+      headStyles: { 
+        fillColor: [248, 250, 252], 
+        textColor: [15, 23, 42], 
+        fontStyle: 'bold',
+        lineWidth: { bottom: 0.5 },
+        lineColor: [203, 213, 225]
+      },
+      styles: { 
+        fontSize: 8, 
+        cellPadding: 5, 
+        textColor: [51, 65, 85]
+      },
+      alternateRowStyles: { fillColor: [255, 255, 255] },
+      bodyStyles: {
+        lineWidth: { bottom: 0.1 },
+        lineColor: [241, 245, 249]
+      },
       columnStyles: {
         0: { cellWidth: 100 },
         1: { halign: 'center', cellWidth: 25 },
@@ -738,127 +751,135 @@ export default function Home() {
       didParseCell: function(data) {
          if(data.section === 'body' && data.column.index === 3) {
             const val = data.cell.raw;
-            if(val === 'BEST-FIT') data.cell.styles.textColor = [21, 128, 61];
-            if(val === 'HIGH') data.cell.styles.textColor = [37, 99, 235];
-            if(val === 'MEDIUM') data.cell.styles.textColor = [202, 138, 4];
-            if(val === 'LOW') data.cell.styles.textColor = [220, 38, 38];
+            if(val === 'BEST-FIT') data.cell.styles.textColor = [5, 150, 105]; // emerald-600
+            if(val === 'HIGH') data.cell.styles.textColor = [37, 99, 235]; // blue-600
+            if(val === 'MEDIUM') data.cell.styles.textColor = [202, 138, 4]; // yellow-600
+            if(val === 'LOW') data.cell.styles.textColor = [220, 38, 38]; // red-600
          }
       },
       didDrawPage: function (data) {
-        const pageSize = doc.internal.pageSize;
-        const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
-        const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
         
         // --- HEADER ---
-        // Add Premium Header Background
-        doc.setFillColor(15, 23, 42); // slate-900
-        doc.rect(0, 0, pageWidth, 40, 'F');
+        // Subtle top accent line
+        doc.setFillColor(37, 99, 235); // blue-600
+        doc.rect(0, 0, pageWidth, 3, 'F');
         
-        // Add Graphic Element in Header
-        doc.setFillColor(59, 130, 246); // blue-500
-        doc.circle(190, 10, 30, 'F');
-        doc.setFillColor(139, 92, 246, 0.5); // violet-500 with opacity
-        doc.circle(180, 30, 20, 'F');
-        
-        // Add Branding Header
-        doc.setFontSize(24);
-        doc.setTextColor(255, 255, 255);
-        doc.setFont("helvetica", "bold");
-        doc.text("EAPCET PREDICTOR", 14, 22);
-        
-        doc.setFontSize(10);
-        doc.setTextColor(148, 163, 184); // slate-400
-        doc.setFont("helvetica", "normal");
-        doc.text("Personalized Admission Report", 14, 30);
-        
-        // Only draw candidate profile on first page
         if (data.pageNumber === 1) {
-            doc.setFontSize(10);
-            doc.setTextColor(15, 23, 42);
+            // Main Title
+            doc.setFontSize(22);
+            doc.setTextColor(15, 23, 42); // slate-900
             doc.setFont("helvetica", "bold");
-            doc.text("Candidate Profile", 14, 50);
+            doc.text("EAPCET PREDICTOR", 14, 22);
             
-            doc.setFontSize(9);
+            // Subtitle
+            doc.setFontSize(10);
+            doc.setTextColor(100, 116, 139); // slate-500
             doc.setFont("helvetica", "normal");
+            doc.text("Personalized Admission Report", 14, 28);
             
-            // Profile box
+            // Candidate Profile Box
             doc.setDrawColor(226, 232, 240); // slate-200
             doc.setFillColor(248, 250, 252); // slate-50
-            doc.roundedRect(14, 54, 182, 16, 2, 2, 'FD');
+            doc.roundedRect(14, 38, pageWidth - 28, 20, 2, 2, 'FD');
             
-            doc.text(`Rank: ${rank || 'N/A'}`, 18, 60);
-            doc.text(`Category: ${category}`, 70, 60);
-            doc.text(`Gender: ${gender}`, 130, 60);
+            doc.setFontSize(8);
+            doc.setTextColor(100, 116, 139); // slate-500
+            doc.text("RANK", 20, 44);
+            doc.text("CATEGORY", 60, 44);
+            doc.text("GENDER", 100, 44);
+            doc.text("COURSE", 140, 44);
             
-            doc.text(`Course: ${branch.length > 0 ? branch.join(', ') : 'All Branches'}`, 18, 66);
-            doc.text(`Region: ${district.length > 0 ? district.join(', ') : 'All Districts'}`, 130, 66);
+            const courseText = branch.length > 0 ? branch.join(', ') : 'All Branches';
+            const displayCourse = courseText.length > 25 ? courseText.substring(0, 25) + "..." : courseText;
+            
+            doc.setFontSize(10);
+            doc.setTextColor(15, 23, 42); // slate-900
+            doc.setFont("helvetica", "bold");
+            doc.text(`${rank || 'N/A'}`, 20, 51);
+            doc.text(`${category}`, 60, 51);
+            doc.text(`${gender}`, 100, 51);
+            doc.text(`${displayCourse}`, 140, 51);
+            
+            doc.setFont("helvetica", "normal");
+        } else {
+            // Minimal header for subsequent pages
+            doc.setFontSize(10);
+            doc.setTextColor(15, 23, 42); // slate-900
+            doc.setFont("helvetica", "bold");
+            doc.text("EAPCET PREDICTOR", 14, 15);
+            
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139); // slate-500
+            doc.setFont("helvetica", "normal");
+            doc.text(`Rank: ${rank || 'N/A'} | ${category} | ${gender}`, 14, 20);
+            
+            // Subtle dividing line
+            doc.setDrawColor(241, 245, 249);
+            doc.line(14, 24, pageWidth - 14, 24);
         }
         
         // --- FOOTER ---
-        doc.setFillColor(241, 245, 249); // slate-100
-        doc.rect(0, pageHeight - 35, pageWidth, 35, 'F');
-        
-        // Footer Text Header
-        doc.setFontSize(10);
-        doc.setTextColor(15, 23, 42); // slate-900
-        doc.setFont("helvetica", "bold");
-        doc.text("Developed by Guduru Jeevan Kumar", 14, pageHeight - 22);
+        // Top border of footer
+        doc.setDrawColor(226, 232, 240); // slate-200
+        doc.setLineWidth(0.5);
+        doc.line(14, pageHeight - 25, pageWidth - 14, pageHeight - 25);
         
         // Setup for Links
-        doc.setFontSize(8);
-        doc.setTextColor(71, 85, 105); // slate-600
-        doc.setFont("helvetica", "normal");
-        
         let startX = 14;
+        const startY = pageHeight - 16;
         
         // --- YouTube Logo & Link ---
         doc.setFillColor(220, 38, 38); // Red
-        doc.roundedRect(startX, pageHeight - 16, 6, 4.5, 1, 1, 'F');
+        doc.roundedRect(startX, startY, 5, 3.5, 0.5, 0.5, 'F');
         doc.setFillColor(255, 255, 255); // White
-        doc.triangle(startX + 2.5, pageHeight - 15, startX + 2.5, pageHeight - 12.5, startX + 4, pageHeight - 13.75, 'F');
+        doc.triangle(startX + 2, startY + 0.8, startX + 2, startY + 2.7, startX + 3.5, startY + 1.75, 'F');
         
-        doc.text("@GuduruJeevanKumar", startX + 8, pageHeight - 12.5);
+        doc.setFontSize(7);
+        doc.setTextColor(71, 85, 105); // slate-600
+        doc.text("GuduruJeevanKumar", startX + 7, startY + 2.5);
         
         // --- LinkedIn Logo & Link ---
-        startX += 42;
+        startX += 40;
         doc.setFillColor(0, 119, 181); // LinkedIn Blue
-        doc.roundedRect(startX, pageHeight - 16, 4.5, 4.5, 0.5, 0.5, 'F');
+        doc.roundedRect(startX, startY, 3.5, 3.5, 0.5, 0.5, 'F');
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(6);
+        doc.setFontSize(5);
         doc.setFont("helvetica", "bold");
-        doc.text("in", startX + 1, pageHeight - 12.5);
+        doc.text("in", startX + 0.8, startY + 2.6);
         
-        doc.setFontSize(8);
+        doc.setFontSize(7);
         doc.setTextColor(71, 85, 105); // slate-600
         doc.setFont("helvetica", "normal");
-        doc.text("Guduru Jeevan Kumar", startX + 6.5, pageHeight - 12.5);
+        doc.text("Guduru Jeevan Kumar", startX + 5, startY + 2.5);
         
         // --- Instagram Logo & Link ---
-        startX += 40;
+        startX += 42;
         doc.setDrawColor(225, 48, 108); // Pink/Magenta
-        doc.setLineWidth(0.4);
-        doc.roundedRect(startX, pageHeight - 16, 4.5, 4.5, 1, 1, 'S'); // Outer box
-        doc.circle(startX + 2.25, pageHeight - 13.75, 1, 'S'); // Inner circle
+        doc.setLineWidth(0.3);
+        doc.roundedRect(startX, startY, 3.5, 3.5, 0.8, 0.8, 'S'); // Outer box
+        doc.circle(startX + 1.75, startY + 1.75, 0.8, 'S'); // Inner circle
         doc.setFillColor(225, 48, 108);
-        doc.circle(startX + 3.6, pageHeight - 15.2, 0.3, 'F'); // Dot
+        doc.circle(startX + 2.8, startY + 0.7, 0.2, 'F'); // Dot
         
-        doc.text("@GuduruJeevanKumar", startX + 6.5, pageHeight - 12.5);
+        doc.text("GuduruJeevanKumar", startX + 5, startY + 2.5);
         
         // --- Website Logo & Link ---
-        startX += 44;
+        startX += 40;
         doc.setDrawColor(15, 23, 42); // slate-900
-        doc.setLineWidth(0.3);
-        doc.circle(startX + 2.25, pageHeight - 13.75, 2.25, 'S'); // Globe outline
-        doc.ellipse(startX + 2.25, pageHeight - 13.75, 1, 2.25, 'S'); // Globe vertical
-        doc.line(startX, pageHeight - 13.75, startX + 4.5, pageHeight - 13.75); // Globe horizontal
+        doc.setLineWidth(0.2);
+        doc.circle(startX + 1.75, startY + 1.75, 1.75, 'S'); // Globe outline
+        doc.ellipse(startX + 1.75, startY + 1.75, 0.8, 1.75, 'S'); // Globe vertical
+        doc.line(startX, startY + 1.75, startX + 3.5, startY + 1.75); // Globe horizontal
         
-        doc.text("Web Predictor", startX + 6.5, pageHeight - 12.5);
+        doc.text("Web Predictor", startX + 5, startY + 2.5);
         
         // --- Page Number ---
         doc.setTextColor(148, 163, 184); // slate-400
-        doc.text(`Page ${doc.internal.getNumberOfPages()}`, pageWidth - 20, pageHeight - 12.5);
+        doc.text(`Page ${doc.internal.getNumberOfPages()}`, pageWidth - 14, startY + 2.5, { align: 'right' });
       },
-      margin: { top: 45, bottom: 40 }
+      margin: { top: 30, bottom: 30 }
     });
     
     // Save
