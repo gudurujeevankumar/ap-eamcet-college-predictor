@@ -575,6 +575,10 @@ export default function Home() {
           max-width: 600px;
           margin: 0 auto 32px;
         }
+        .hero-content {
+          text-align: center;
+          margin-bottom: 40px;
+        }
         .analysis-stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -587,12 +591,13 @@ export default function Home() {
           margin-top: 12px;
         }
         @media (max-width: 768px) {
-          .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
+          .hero-stats-grid { display: none !important; }
+          .hero-content { margin-bottom: 16px !important; }
           .analysis-stats-grid { grid-template-columns: repeat(2, 1fr); }
           .score-breakdown-grid { grid-template-columns: repeat(3, 1fr); }
           .tabs { flex-wrap: wrap; }
-          .form-section-wrapper { padding: 0 16px !important; margin-top: 16px !important; }
-          .hero-section-wrapper { padding: 32px 16px 40px !important; }
+          .form-section-wrapper { padding: 0 16px !important; margin-top: -32px !important; }
+          .hero-section-wrapper { padding: 24px 16px 32px !important; }
         }
       `}</style>
       {/* ─── HERO SECTION ─── */}
@@ -676,7 +681,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ textAlign: "center", marginBottom: "40px" }}
+            className="hero-content"
           >
             <div
               style={{
