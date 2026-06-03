@@ -713,16 +713,19 @@ export default function Home() {
     
     // Generate Table Data
     const predictions = getFilteredPredictions();
-    const tableData = predictions.map(p => [
+    const tableData = predictions.map((p, index) => [
+      index + 1,
       p.college.collegeName,
       p.college.branchCode,
+      p.college.districtFull,
+      p.college.fee ? `₹${p.college.fee.toLocaleString()}` : '-',
       p.closingRank,
       p.chanceLevel.toUpperCase()
     ]);
     
     autoTable(doc, {
       startY: 70, // Start table lower on page 1
-      head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
+      head: [['#', 'College Name', 'Branch', 'Location', 'Fee', 'Cutoff Rank', 'Chance']],
       body: tableData,
       theme: 'plain', // Very clean theme
       headStyles: { 
@@ -734,7 +737,7 @@ export default function Home() {
       },
       styles: { 
         fontSize: 8, 
-        cellPadding: 5, 
+        cellPadding: 4, 
         textColor: [51, 65, 85]
       },
       alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -743,13 +746,16 @@ export default function Home() {
         lineColor: [241, 245, 249]
       },
       columnStyles: {
-        0: { cellWidth: 100 },
-        1: { halign: 'center', cellWidth: 25 },
-        2: { halign: 'center', cellWidth: 35 },
-        3: { halign: 'center', fontStyle: 'bold' }
+        0: { halign: 'center', cellWidth: 8 }, // S.No
+        1: { cellWidth: 70 }, // College Name
+        2: { halign: 'center', cellWidth: 15 }, // Branch
+        3: { halign: 'left', cellWidth: 28 }, // District
+        4: { halign: 'right', cellWidth: 18 }, // Fee
+        5: { halign: 'center', cellWidth: 20 }, // Cutoff
+        6: { halign: 'center', fontStyle: 'bold', cellWidth: 22 } // Chance
       },
       didParseCell: function(data) {
-         if(data.section === 'body' && data.column.index === 3) {
+         if(data.section === 'body' && data.column.index === 6) {
             const val = data.cell.raw;
             if(val === 'BEST-FIT') data.cell.styles.textColor = [5, 150, 105]; // emerald-600
             if(val === 'HIGH') data.cell.styles.textColor = [37, 99, 235]; // blue-600
