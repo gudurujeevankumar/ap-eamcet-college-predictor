@@ -460,7 +460,7 @@ function CollegeCard({ prediction, index }) {
 // CUSTOM MULTI-SELECT COMPONENT
 // ─────────────────────────────────────────────────────────────
 
-function MultiSelect({ options, values, onChange, placeholder }) {
+function MultiSelect({ options, values, onChange, placeholder, isSingle = false }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -478,19 +478,28 @@ function MultiSelect({ options, values, onChange, placeholder }) {
     };
   }, [placeholder]);
 
+  const isSelected = (val) => isSingle ? values === val : values.includes(val);
+
   const toggleOption = (val) => {
-    if (values.includes(val)) {
-      onChange(values.filter(v => v !== val));
+    if (isSingle) {
+      onChange(val);
+      setIsOpen(false);
     } else {
-      onChange([...values, val]);
+      if (values.includes(val)) {
+        onChange(values.filter(v => v !== val));
+      } else {
+        onChange([...values, val]);
+      }
     }
   };
 
-  const displayValue = values.length === 0 
-    ? placeholder 
-    : values.length === 1 
-      ? options.find(o => o.value === values[0])?.label || placeholder 
-      : `${values.length} Selected`;
+  const displayValue = isSingle 
+    ? (options.find(o => o.value === values)?.label || placeholder)
+    : (values.length === 0 
+      ? placeholder 
+      : values.length === 1 
+        ? options.find(o => o.value === values[0])?.label || placeholder 
+        : `${values.length} Selected`);
 
   return (
     <div className={`multi-select-container-${placeholder.replace(/\s+/g, '')}`} style={{ position: 'relative', width: '100%' }}>
@@ -514,7 +523,7 @@ function MultiSelect({ options, values, onChange, placeholder }) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-          <span style={{ color: values.length === 0 ? '#94a3b8' : '#0f172a', fontSize: '14px' }}>{displayValue}</span>
+          <span style={{ color: (!isSingle && values.length === 0) || (isSingle && !values) ? '#94a3b8' : '#0f172a', fontSize: '14px' }}>{displayValue}</span>
         </div>
         <ChevronDown size={16} style={{ color: '#94a3b8', minWidth: '16px' }} />
       </div>
@@ -549,24 +558,26 @@ function MultiSelect({ options, values, onChange, placeholder }) {
                 gap: '8px',
                 cursor: 'pointer',
                 borderRadius: '6px',
-                background: values.includes(opt.value) ? '#f0fdf4' : 'transparent',
+                background: isSelected(opt.value) ? '#f0fdf4' : 'transparent',
               }}
-              onMouseOver={(e) => !values.includes(opt.value) && (e.currentTarget.style.background = '#f8fafc')}
-              onMouseOut={(e) => !values.includes(opt.value) && (e.currentTarget.style.background = 'transparent')}
+              onMouseOver={(e) => !isSelected(opt.value) && (e.currentTarget.style.background = '#f8fafc')}
+              onMouseOut={(e) => !isSelected(opt.value) && (e.currentTarget.style.background = 'transparent')}
             >
+              {!isSingle && (
               <div style={{ 
                 width: '16px', 
                 height: '16px', 
                 borderRadius: '4px', 
-                border: `1px solid ${values.includes(opt.value) ? '#22c55e' : '#cbd5e1'}`,
-                background: values.includes(opt.value) ? '#22c55e' : 'white',
+                border: `1px solid ${isSelected(opt.value) ? '#22c55e' : '#cbd5e1'}`,
+                background: isSelected(opt.value) ? '#22c55e' : 'white',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0
               }}>
-                {values.includes(opt.value) && <Check size={12} color="white" strokeWidth={3} />}
+                {isSelected(opt.value) && <Check size={12} color="white" strokeWidth={3} />}
               </div>
+              )}
               <span style={{ fontSize: '14px', color: '#334155' }}>{opt.label}</span>
             </div>
           ))}
@@ -718,13 +729,14 @@ export default function Home() {
       p.college.collegeName,
       p.college.branchCode,
       p.college.districtFull,
-      p.college.fee ? `₹${p.college.fee.toLocaleString()}` : '-',
+      p.college.fee ? `Rs. ${p.college.fee.toLocaleString()}` : '-',
       p.closingRank,
       p.chanceLevel.toUpperCase()
     ]);
     
     autoTable(doc, {
       startY: 70, // Start table lower on page 1
+      rowPageBreak: 'avoid', // Prevent a row from splitting across pages
       head: [['#', 'College Name', 'Branch', 'Location', 'Fee', 'Cutoff Rank', 'Chance']],
       body: tableData,
       theme: 'grid', // Clean grid for clear table format
@@ -1227,19 +1239,13 @@ export default function Home() {
             {/* Category */}
             <div>
               <label className="form-label">Category *</label>
-              <select
-                className="form-select"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                id="input-category"
-              >
-                <option value="">Select Category</option>
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
+              <MultiSelect
+                options={CATEGORIES}
+                values={category}
+                onChange={setCategory}
+                placeholder="Select Category"
+                isSingle={true}
+              />
             </div>
 
             {/* Gender */}
