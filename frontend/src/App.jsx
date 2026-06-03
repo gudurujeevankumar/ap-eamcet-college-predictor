@@ -478,6 +478,14 @@ export default function Home() {
 
   // UI state
   const [activeTab, setActiveTab] = useState("predictions");
+  const [visitorCount, setVisitorCount] = useState(null);
+
+  useEffect(() => {
+    fetch("https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits/up")
+      .then((res) => res.json())
+      .then((data) => setVisitorCount(data.count + 35)) // Offset existing visitors
+      .catch(() => setVisitorCount(36));
+  }, []);
   const [activeChanceFilter, setActiveChanceFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   // Pagination
@@ -674,6 +682,24 @@ export default function Home() {
               >
                 271 Colleges • 69 Branches
               </span>
+              {visitorCount !== null && (
+                <span
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    background: "rgba(59, 130, 246, 0.15)",
+                    color: "#60a5fa",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <Users size={14} />
+                  {visitorCount}+ Visitors
+                </span>
+              )}
             </div>
           </nav>
 
