@@ -711,16 +711,6 @@ export default function Home() {
     if (!result) return;
     const doc = new jsPDF();
     
-    // Add Branding Header
-    doc.setFontSize(18);
-    doc.setTextColor(15, 23, 42);
-    doc.text("AP EAMCET College Predictor 2026", 14, 22);
-    
-    // Add Subtitle & User details
-    doc.setFontSize(11);
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Rank: ${rank} | Category: ${category} | Gender: ${gender}`, 14, 32);
-    
     // Generate Table Data
     const predictions = getFilteredPredictions();
     const tableData = predictions.map(p => [
@@ -730,37 +720,149 @@ export default function Home() {
       p.chanceLevel.toUpperCase()
     ]);
     
-    // Add Table with Footer & Watermark
+    // Add Table with Header, Footer & Watermark
     autoTable(doc, {
-      startY: 40,
+      startY: 78,
       head: [['College Name', 'Branch', 'Closing Rank', 'Chance']],
       body: tableData,
       theme: 'grid',
-      headStyles: { fillColor: [59, 130, 246] },
-      styles: { fontSize: 9 },
+      headStyles: { fillColor: [15, 23, 42], textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      styles: { fontSize: 8, cellPadding: 4, lineColor: [226, 232, 240] },
       columnStyles: {
         0: { cellWidth: 100 },
+        1: { halign: 'center', cellWidth: 25 },
+        2: { halign: 'center', cellWidth: 35 },
+        3: { halign: 'center', fontStyle: 'bold' }
+      },
+      didParseCell: function(data) {
+         if(data.section === 'body' && data.column.index === 3) {
+            const val = data.cell.raw;
+            if(val === 'BEST-FIT') data.cell.styles.textColor = [21, 128, 61];
+            if(val === 'HIGH') data.cell.styles.textColor = [37, 99, 235];
+            if(val === 'MEDIUM') data.cell.styles.textColor = [202, 138, 4];
+            if(val === 'LOW') data.cell.styles.textColor = [220, 38, 38];
+         }
       },
       didDrawPage: function (data) {
-        // Footer
-        doc.setFontSize(9);
-        doc.setTextColor(100, 116, 139);
         const pageSize = doc.internal.pageSize;
         const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+        const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
         
-        // Social Links & Branding
-        doc.text("Developed by Guduru Jeevan Kumar | YouTube: @GuduruJeevanKumar", data.settings.margin.left, pageHeight - 12);
-        doc.text("Link: ap-eamcet-college-predictor.vercel.app", data.settings.margin.left, pageHeight - 7);
+        // --- HEADER ---
+        // Add Premium Header Background
+        doc.setFillColor(15, 23, 42); // slate-900
+        doc.rect(0, 0, pageWidth, 40, 'F');
         
-        // Page Number
-        const pageNumber = "Page " + doc.internal.getNumberOfPages();
-        doc.text(pageNumber, pageSize.width - data.settings.margin.right - 15, pageHeight - 10);
+        // Add Graphic Element in Header
+        doc.setFillColor(59, 130, 246); // blue-500
+        doc.circle(190, 10, 30, 'F');
+        doc.setFillColor(139, 92, 246, 0.5); // violet-500 with opacity
+        doc.circle(180, 30, 20, 'F');
+        
+        // Add Branding Header
+        doc.setFontSize(24);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.text("EAPCET PREDICTOR", 14, 22);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(148, 163, 184); // slate-400
+        doc.setFont("helvetica", "normal");
+        doc.text("Personalized Admission Report", 14, 30);
+        
+        // Only draw candidate profile on first page
+        if (data.pageNumber === 1) {
+            doc.setFontSize(10);
+            doc.setTextColor(15, 23, 42);
+            doc.setFont("helvetica", "bold");
+            doc.text("Candidate Profile", 14, 50);
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            
+            // Profile box
+            doc.setDrawColor(226, 232, 240); // slate-200
+            doc.setFillColor(248, 250, 252); // slate-50
+            doc.roundedRect(14, 54, 182, 16, 2, 2, 'FD');
+            
+            doc.text(`Rank: ${rank || 'N/A'}`, 18, 60);
+            doc.text(`Category: ${category}`, 70, 60);
+            doc.text(`Gender: ${gender}`, 130, 60);
+            
+            doc.text(`Course: ${branch.length > 0 ? branch.join(', ') : 'All Branches'}`, 18, 66);
+            doc.text(`Region: ${district.length > 0 ? district.join(', ') : 'All Districts'}`, 130, 66);
+        }
+        
+        // --- FOOTER ---
+        doc.setFillColor(241, 245, 249); // slate-100
+        doc.rect(0, pageHeight - 35, pageWidth, 35, 'F');
+        
+        // Footer Text Header
+        doc.setFontSize(10);
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.setFont("helvetica", "bold");
+        doc.text("Developed by Guduru Jeevan Kumar", 14, pageHeight - 22);
+        
+        // Setup for Links
+        doc.setFontSize(8);
+        doc.setTextColor(71, 85, 105); // slate-600
+        doc.setFont("helvetica", "normal");
+        
+        let startX = 14;
+        
+        // --- YouTube Logo & Link ---
+        doc.setFillColor(220, 38, 38); // Red
+        doc.roundedRect(startX, pageHeight - 16, 6, 4.5, 1, 1, 'F');
+        doc.setFillColor(255, 255, 255); // White
+        doc.triangle(startX + 2.5, pageHeight - 15, startX + 2.5, pageHeight - 12.5, startX + 4, pageHeight - 13.75, 'F');
+        
+        doc.text("@GuduruJeevanKumar", startX + 8, pageHeight - 12.5);
+        
+        // --- LinkedIn Logo & Link ---
+        startX += 42;
+        doc.setFillColor(0, 119, 181); // LinkedIn Blue
+        doc.roundedRect(startX, pageHeight - 16, 4.5, 4.5, 0.5, 0.5, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(6);
+        doc.setFont("helvetica", "bold");
+        doc.text("in", startX + 1, pageHeight - 12.5);
+        
+        doc.setFontSize(8);
+        doc.setTextColor(71, 85, 105); // slate-600
+        doc.setFont("helvetica", "normal");
+        doc.text("Guduru Jeevan Kumar", startX + 6.5, pageHeight - 12.5);
+        
+        // --- Instagram Logo & Link ---
+        startX += 40;
+        doc.setDrawColor(225, 48, 108); // Pink/Magenta
+        doc.setLineWidth(0.4);
+        doc.roundedRect(startX, pageHeight - 16, 4.5, 4.5, 1, 1, 'S'); // Outer box
+        doc.circle(startX + 2.25, pageHeight - 13.75, 1, 'S'); // Inner circle
+        doc.setFillColor(225, 48, 108);
+        doc.circle(startX + 3.6, pageHeight - 15.2, 0.3, 'F'); // Dot
+        
+        doc.text("@GuduruJeevanKumar", startX + 6.5, pageHeight - 12.5);
+        
+        // --- Website Logo & Link ---
+        startX += 44;
+        doc.setDrawColor(15, 23, 42); // slate-900
+        doc.setLineWidth(0.3);
+        doc.circle(startX + 2.25, pageHeight - 13.75, 2.25, 'S'); // Globe outline
+        doc.ellipse(startX + 2.25, pageHeight - 13.75, 1, 2.25, 'S'); // Globe vertical
+        doc.line(startX, pageHeight - 13.75, startX + 4.5, pageHeight - 13.75); // Globe horizontal
+        
+        doc.text("Web Predictor", startX + 6.5, pageHeight - 12.5);
+        
+        // --- Page Number ---
+        doc.setTextColor(148, 163, 184); // slate-400
+        doc.text(`Page ${doc.internal.getNumberOfPages()}`, pageWidth - 20, pageHeight - 12.5);
       },
-      margin: { bottom: 25 }
+      margin: { top: 45, bottom: 40 }
     });
     
     // Save
-    doc.save(`AP_EAMCET_Predictions_Rank_${rank}.pdf`);
+    doc.save(`AP_EAMCET_Predictions_Rank_${rank || 'All'}.pdf`);
   };
 
   return (
