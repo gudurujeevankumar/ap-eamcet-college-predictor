@@ -19,9 +19,12 @@ An advanced, highly-accurate College Predictor built specifically for AP EAPCET 
 ## ✨ Key Features
 - **Intelligent Forecasting Engine**: Custom algorithm mapping student ranks, categories, and budgets to true admission probabilities.
 - **Extensive Data Coverage**: Integrated with official 2024 cutoff datasets covering 271+ colleges and 69 branches across 13 districts.
-- **Advanced Filtering**: Search dynamically by district, college type, preferred branch, and strict fee/budget constraints.
-- **Personalized Counseling Simulator**: Predict exact admission outcomes for Round 1, Round 2, and Final Phase counseling.
-- **Premium User Experience**: Built with modern React, TailwindCSS, and Framer Motion for a lightning-fast, seamless experience.
+- **Multi-Dimensional Filtering**: Seamlessly filter results with multi-select dropdowns for courses, districts, college types, and dynamic tuition budget ranges.
+- **Premium PDF Dossier Generation**: Export personalized, color-coded admission prediction reports natively rendered in PDF format, complete with candidate profiles and dynamic data grids.
+- **Lightning-Fast Architecture**: Engineered with lazy-loading data pipelines for instant Time-To-Interactive (TTI) performance without blocking the main thread.
+- **Progressive Web App (PWA) Ready**: Installable native mobile experience with advanced SEO, Open Graph preview cards, and mobile-optimized interfaces.
+- **Personalized Counseling Simulator**: Predict exact admission outcomes for Round 1, Round 2, and Final Phase counseling (Coming Soon).
+- **Premium User Experience**: Built with modern React, TailwindCSS, and Framer Motion for a breathtaking, modern corporate aesthetic.
 
 ## ⚠️ Copyright & License Notice
 
