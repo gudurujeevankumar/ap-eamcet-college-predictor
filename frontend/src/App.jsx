@@ -1113,7 +1113,7 @@ export default function Home() {
                 height: "100%",
                 border: 0,
               }}
-              src="https://www.youtube.com/embed/QNZ4iP0gZMI?start=200&end=400"
+              src="https://www.youtube.com/embed/QNZ4iP0gZMI?start=255&end=400"
               title="AP EAMCET College Predictor Tutorial"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
