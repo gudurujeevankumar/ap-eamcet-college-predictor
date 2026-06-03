@@ -1624,20 +1624,43 @@ export default function Home() {
                     key: "counseling",
                     label: "Counseling Sim",
                     icon: <CalendarDays size={16} />,
+                    disabled: true,
+                    comingSoon: true,
                   },
                 ].map((tab) => (
                   <button
                     key={tab.key}
                     className={`tab ${activeTab === tab.key ? "active" : ""}`}
-                    onClick={() => setActiveTab(tab.key)}
+                    onClick={() => !tab.disabled && setActiveTab(tab.key)}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "6px",
+                      opacity: tab.disabled ? 0.7 : 1,
+                      cursor: tab.disabled ? "not-allowed" : "pointer",
+                      position: "relative",
                     }}
+                    title={tab.comingSoon ? "This feature is coming soon" : ""}
                   >
-                    {tab.icon} {tab.label}
+                    {tab.icon} <span style={{ textDecoration: tab.disabled ? 'line-through' : 'none', color: tab.disabled ? '#94a3b8' : 'inherit' }}>{tab.label}</span>
+                    {tab.comingSoon && (
+                      <span
+                        style={{
+                          fontSize: "9px",
+                          fontWeight: 700,
+                          background: "#e2e8f0",
+                          color: "#64748b",
+                          padding: "2px 6px",
+                          borderRadius: "10px",
+                          marginLeft: "4px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        }}
+                      >
+                        Soon
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
