@@ -1074,6 +1074,54 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* ─── VIDEO TUTORIAL SECTION ─── */}
+      {!result && (
+        <section
+          style={{
+            maxWidth: "800px",
+            margin: "48px auto 0",
+            padding: "0 24px",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "24px" }}>
+            <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#0f172a" }}>
+              How to use this Predictor
+            </h2>
+            <p style={{ fontSize: "14px", color: "#64748b", marginTop: "8px" }}>
+              Watch this quick Telugu tutorial to understand how to get the most accurate college predictions based on your rank.
+            </p>
+          </div>
+          <div
+            style={{
+              position: "relative",
+              paddingBottom: "56.25%", /* 16:9 aspect ratio */
+              height: 0,
+              overflow: "hidden",
+              borderRadius: "16px",
+              boxShadow: "var(--shadow-elevated)",
+              border: "1px solid rgba(0,0,0,0.1)"
+            }}
+          >
+            <iframe
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                border: 0,
+              }}
+              src="https://www.youtube.com/embed/QNZ4iP0gZMI?start=200&end=400"
+              title="AP EAMCET College Predictor Tutorial"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </section>
+      )}
+
       {/* ─── RESULTS SECTION ─── */}
       <AnimatePresence>
         {result && (
