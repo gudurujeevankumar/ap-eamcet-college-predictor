@@ -135,15 +135,11 @@ export function getCutoffKey(category, gender) {
   }
 }
 
-// Fee budget ranges
 export const FEE_RANGES = [
-  { label: "Any Fee", value: 0 },
-  { label: "Under ₹40,000", value: 40000 },
-  { label: "Under ₹60,000", value: 60000 },
-  { label: "Under ₹80,000", value: 80000 },
-  { label: "Under ₹1,00,000", value: 100000 },
-  { label: "Under ₹1,50,000", value: 150000 },
-  { label: "Under ₹2,00,000", value: 200000 },
+  { label: "Below ₹40,000", value: "0-40000" },
+  { label: "₹40,000 - ₹70,000", value: "40000-70000" },
+  { label: "₹70,000 - ₹1,00,000", value: "70000-100000" },
+  { label: "₹1,00,000+", value: "100000-9999999" },
 ];
 
 // Categories list

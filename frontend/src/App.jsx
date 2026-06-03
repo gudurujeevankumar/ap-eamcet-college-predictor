@@ -19,8 +19,8 @@ import {
   X,
   Brain,
   Zap,
-  Shield,
   CheckCircle2,
+  Check,
   AlertTriangle,
   Trophy,
   Compass,
@@ -455,15 +455,128 @@ function CollegeCard({ prediction, index }) {
 // MAIN PAGE COMPONENT
 // ─────────────────────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────
+// CUSTOM MULTI-SELECT COMPONENT
+// ─────────────────────────────────────────────────────────────
+
+function MultiSelect({ options, values, onChange, placeholder }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.multi-select-container-' + placeholder.replace(/\s+/g, ''))) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [placeholder]);
+
+  const toggleOption = (val) => {
+    if (values.includes(val)) {
+      onChange(values.filter(v => v !== val));
+    } else {
+      onChange([...values, val]);
+    }
+  };
+
+  const displayValue = values.length === 0 
+    ? placeholder 
+    : values.length === 1 
+      ? options.find(o => o.value === values[0])?.label || placeholder 
+      : `${values.length} Selected`;
+
+  return (
+    <div className={`multi-select-container-${placeholder.replace(/\s+/g, '')}`} style={{ position: 'relative', width: '100%' }}>
+      <div 
+        className="form-input"
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          cursor: 'pointer',
+          paddingLeft: '14px',
+          userSelect: 'none',
+          minHeight: '44px',
+          background: 'white'
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+          <span style={{ color: values.length === 0 ? '#94a3b8' : '#0f172a', fontSize: '14px' }}>{displayValue}</span>
+        </div>
+        <ChevronDown size={16} style={{ color: '#94a3b8', minWidth: '16px' }} />
+      </div>
+
+      {isOpen && (
+        <div style={{ 
+          position: 'absolute', 
+          top: '100%', 
+          left: 0, 
+          right: 0, 
+          marginTop: '4px',
+          background: 'white', 
+          border: '1px solid #e2e8f0', 
+          borderRadius: '8px', 
+          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+          zIndex: 50,
+          maxHeight: '250px',
+          overflowY: 'auto',
+          padding: '4px'
+        }}>
+          {options.map((opt) => (
+            <div 
+              key={opt.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleOption(opt.value);
+              }}
+              style={{
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                borderRadius: '6px',
+                background: values.includes(opt.value) ? '#f0fdf4' : 'transparent',
+              }}
+              onMouseOver={(e) => !values.includes(opt.value) && (e.currentTarget.style.background = '#f8fafc')}
+              onMouseOut={(e) => !values.includes(opt.value) && (e.currentTarget.style.background = 'transparent')}
+            >
+              <div style={{ 
+                width: '16px', 
+                height: '16px', 
+                borderRadius: '4px', 
+                border: `1px solid ${values.includes(opt.value) ? '#22c55e' : '#cbd5e1'}`,
+                background: values.includes(opt.value) ? '#22c55e' : 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                {values.includes(opt.value) && <Check size={12} color="white" strokeWidth={3} />}
+              </div>
+              <span style={{ fontSize: '14px', color: '#334155' }}>{opt.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
   // Form state
   const [rank, setRank] = useState("");
   const [category, setCategory] = useState("");
   const [gender, setGender] = useState("Male");
-  const [branch, setBranch] = useState("ALL");
-  const [district, setDistrict] = useState("ALL");
-  const [budget, setBudget] = useState("0");
-  const [collegeType, setCollegeType] = useState("All");
+  const [branch, setBranch] = useState([]);
+  const [district, setDistrict] = useState([]);
+  const [budget, setBudget] = useState([]);
+  const [collegeType, setCollegeType] = useState([]);
 
   // Results state
   const [result, setResult] = useState(null);
@@ -1024,71 +1137,45 @@ export default function Home() {
             {/* College Type */}
             <div>
               <label className="form-label">College Type</label>
-              <select
-                className="form-select"
-                value={collegeType}
-                onChange={(e) => setCollegeType(e.target.value)}
-                id="input-college-type"
-              >
-                {COLLEGE_TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
+              <MultiSelect
+                options={COLLEGE_TYPES.filter(t => t.value !== "All")}
+                values={collegeType}
+                onChange={setCollegeType}
+                placeholder="All Types"
+              />
             </div>
 
             {/* District */}
             <div>
               <label className="form-label">Preferred District</label>
-              <select
-                className="form-select"
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-                id="input-district"
-              >
-                <option value="ALL">All Districts</option>
-                {districtsData.map((d) => (
-                  <option key={d.code} value={d.code}>
-                    {d.name} ({d.totalColleges} colleges)
-                  </option>
-                ))}
-              </select>
+              <MultiSelect
+                options={districtsData.map(d => ({ label: `${d.name} (${d.totalColleges})`, value: d.code }))}
+                values={district}
+                onChange={setDistrict}
+                placeholder="All Districts"
+              />
             </div>
 
             {/* Branch */}
             <div>
               <label className="form-label">Preferred Course</label>
-              <select
-                className="form-select"
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-                id="input-branch"
-              >
-                <option value="ALL">All Courses</option>
-                {sortedBranches.map((b) => (
-                  <option key={b.code} value={b.code}>
-                    {b.name} ({b.colleges})
-                  </option>
-                ))}
-              </select>
+              <MultiSelect
+                options={sortedBranches.map(b => ({ label: `${b.name} (${b.colleges})`, value: b.code }))}
+                values={branch}
+                onChange={setBranch}
+                placeholder="All Courses"
+              />
             </div>
 
             {/* Budget */}
             <div>
               <label className="form-label">Tuition Budget</label>
-              <select
-                className="form-select"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
-                id="input-budget"
-              >
-                {FEE_RANGES.map((f) => (
-                  <option key={f.value} value={f.value}>
-                    {f.label}
-                  </option>
-                ))}
-              </select>
+              <MultiSelect
+                options={FEE_RANGES}
+                values={budget}
+                onChange={setBudget}
+                placeholder="Any Fee"
+              />
             </div>
 
             {/* Predict Button */}

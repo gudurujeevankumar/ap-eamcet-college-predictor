@@ -24,17 +24,35 @@ function applyRuleEngine(records, input) {
   const cutoffKey = getCutoffKey(input.category, input.gender);
   return records.filter((record) => {
     // Branch match
-    if (input.branch !== "ALL" && record.branchCode !== input.branch)
-      return false;
+    if (input.branch && input.branch.length > 0 && !input.branch.includes("ALL")) {
+      if (!input.branch.includes(record.branchCode)) return false;
+    }
     // College type match
-    if (input.collegeType !== "All") {
-      if (record.type !== input.collegeType) return false;
+    if (input.collegeType && input.collegeType.length > 0 && !input.collegeType.includes("All")) {
+      if (!input.collegeType.includes(record.type)) return false;
     }
     // District match
-    if (input.district !== "ALL" && record.district !== input.district)
-      return false;
-    // Budget match (0 = no limit)
-    if (input.budget > 0 && record.fee > input.budget) return false;
+    if (input.district && input.district.length > 0 && !input.district.includes("ALL")) {
+      if (!input.district.includes(record.district)) return false;
+    }
+    // Budget match
+    if (input.budget && input.budget.length > 0) {
+      let feeMatched = false;
+      for (const range of input.budget) {
+        if (range === "0") {
+          feeMatched = true; // Legacy "Any Fee" fallback
+          break;
+        }
+        const [minStr, maxStr] = range.split("-");
+        const min = parseInt(minStr, 10);
+        const max = parseInt(maxStr, 10);
+        if (record.fee >= min && record.fee <= max) {
+          feeMatched = true;
+          break;
+        }
+      }
+      if (!feeMatched) return false;
+    }
     // Must have cutoff data for this category+gender
     const cutoff = record.cutoffs[cutoffKey];
     if (cutoff === null || cutoff === undefined) return false;
