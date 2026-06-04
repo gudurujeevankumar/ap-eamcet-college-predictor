@@ -618,7 +618,7 @@ export default function Home() {
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisited_EAPCET");
     const endpoint = hasVisited 
-      ? "https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits" // Only fetch count
+      ? "https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits/" // Only fetch count
       : "https://api.counterapi.dev/v1/ap-eamcet-predictor-2026/visits/up"; // Fetch and increment
 
     fetch(endpoint)
