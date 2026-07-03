@@ -383,10 +383,23 @@ export async function predict(input) {
   let rawPredictions = [];
   try {
     const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+    
+    // API Payload Adapter: Convert frontend multi-select arrays to single strings expected by FastAPI
+    const apiPayload = {
+      rank: Number(input.rank) || 0,
+      category: input.category || "OC",
+      gender: input.gender || "Male",
+      branch: "ALL", // Backend expects string, frontend has array
+      district: "ALL", // Backend expects string, frontend has array
+      budget: 0, // Backend expects int, frontend has array/range
+      collegeType: "All", // Backend expects string, frontend has array
+      region: input.region || "ALL"
+    };
+    
     const response = await fetch(`${API_URL}/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
+      body: JSON.stringify(apiPayload),
     });
     if (response.ok) {
       rawPredictions = await response.json();

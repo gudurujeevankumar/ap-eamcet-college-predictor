@@ -28,6 +28,7 @@ import {
   CalendarDays,
   Mail,
   Download,
+  Hash,
 } from "lucide-react";
 import {
   BarChart,
@@ -199,6 +200,10 @@ function CollegeCard({ prediction, index }) {
                   ? "~ Fair Chance"
                   : "✗ Low Chance"}
             </span>
+          </div>
+          
+          <div style={{ marginTop: "6px", fontSize: "13px", color: "#64748b", display: "flex", alignItems: "center", gap: "6px" }}>
+             <Hash size={14} /> <span style={{fontWeight: 600}}>Code:</span> {college.instCode}
           </div>
 
           <div
@@ -726,6 +731,7 @@ export default function Home() {
     const predictions = getFilteredPredictions();
     const tableData = predictions.map((p, index) => [
       index + 1,
+      p.college.instCode,
       p.college.collegeName,
       p.college.branchCode,
       p.college.districtFull,
@@ -737,7 +743,7 @@ export default function Home() {
     autoTable(doc, {
       startY: 70, // Start table lower on page 1
       rowPageBreak: 'avoid', // Prevent a row from splitting across pages
-      head: [['#', 'College Name', 'Branch', 'Location', 'Fee', 'Cutoff Rank', 'Chance']],
+      head: [['#', 'College Code', 'College Name', 'Branch', 'Location', 'Fee', 'Cutoff Rank', 'Chance']],
       body: tableData,
       theme: 'grid', // Clean grid for clear table format
       headStyles: { 
@@ -756,15 +762,16 @@ export default function Home() {
       alternateRowStyles: { fillColor: [248, 250, 252] }, // slate-50 alternate rows
       columnStyles: {
         0: { halign: 'center', cellWidth: 'wrap' }, // S.No
-        1: { halign: 'left', cellWidth: 'auto' }, // College Name (auto wraps)
-        2: { halign: 'center', cellWidth: 'wrap' }, // Branch
-        3: { halign: 'left', cellWidth: 'auto' }, // District (auto wraps)
-        4: { halign: 'right', cellWidth: 'wrap' }, // Fee
-        5: { halign: 'center', cellWidth: 'wrap' }, // Cutoff
-        6: { halign: 'center', fontStyle: 'bold', cellWidth: 'wrap' } // Chance
+        1: { halign: 'center', cellWidth: 'wrap', fontStyle: 'bold' }, // College Code
+        2: { halign: 'left', cellWidth: 'auto' }, // College Name (auto wraps)
+        3: { halign: 'center', cellWidth: 'wrap' }, // Branch
+        4: { halign: 'left', cellWidth: 'auto' }, // District (auto wraps)
+        5: { halign: 'right', cellWidth: 'wrap' }, // Fee
+        6: { halign: 'center', cellWidth: 'wrap' }, // Cutoff
+        7: { halign: 'center', fontStyle: 'bold', cellWidth: 'wrap' } // Chance
       },
       didParseCell: function(data) {
-         if(data.section === 'body' && data.column.index === 6) {
+         if(data.section === 'body' && data.column.index === 7) {
             const val = data.cell.raw;
             if(val === 'BEST-FIT') data.cell.styles.textColor = [5, 150, 105]; // emerald-600
             if(val === 'HIGH') data.cell.styles.textColor = [37, 99, 235]; // blue-600
@@ -2575,6 +2582,16 @@ export default function Home() {
                               fontWeight: 600,
                             }}
                           >
+                            Code
+                          </th>
+                          <th
+                            style={{
+                              textAlign: "left",
+                              padding: "12px 8px",
+                              color: "#94a3b8",
+                              fontWeight: 600,
+                            }}
+                          >
                             College
                           </th>
                           <th
@@ -2627,6 +2644,15 @@ export default function Home() {
                               key={i}
                               style={{ borderBottom: "1px solid #f1f5f9" }}
                             >
+                              <td
+                                style={{
+                                  padding: "10px 8px",
+                                  fontWeight: 700,
+                                  color: "#3b82f6",
+                                }}
+                              >
+                                {p.college.instCode}
+                              </td>
                               <td
                                 style={{
                                   padding: "10px 8px",
