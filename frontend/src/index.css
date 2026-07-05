@@ -236,29 +236,6 @@ body {
 }
 
 /* ─── College Card ─── */
-.college-card {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.college-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 4px;
-  border-radius: 4px 0 0 4px;
-}
-.college-card.best-fit::before { background: #8b5cf6; }
-.college-card.high::before { background: #10b981; }
-.college-card.medium::before { background: #f59e0b; }
-.college-card.low::before { background: #f43f5e; }
 
 /* ─── Progress Bar ─── */
 .progress-bar {
@@ -645,4 +622,241 @@ body {
   .social-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FINAL RESPONSIVE UX PREDICTION CARDS (UNIFIED CSS REFACTOR)
+   ───────────────────────────────────────────────────────────── */
+html, body, #root {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.college-card {
+  box-sizing: border-box;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  margin-bottom: 20px;
+  padding: 24px;
+}
+
+.college-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+}
+
+.college-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+.college-card.best-fit::before { background: #10b981; }
+.college-card.high::before { background: #3b82f6; }
+.college-card.medium::before { background: #f59e0b; }
+.college-card.low::before { background: #ef4444; }
+
+/* ─── BASE (DESKTOP) LAYOUT ─── */
+.cc-grid {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.cc-progress {
+  flex-shrink: 0;
+  width: 64px;
+}
+
+.cc-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.cc-title-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.cc-code {
+  padding: 4px 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cc-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0px;
+  line-height: 1.2;
+}
+
+.cc-badge {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.cc-details {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.cc-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.cc-stats-grid {
+  display: flex;
+  gap: 32px;
+  padding: 16px 0;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 16px;
+}
+
+.c-stat-box { display: flex; flex-direction: column; }
+.c-stat-label { font-size: 12px; text-transform: uppercase; color: #6b7280; margin-bottom: 2px; }
+.c-stat-val { font-size: 18px; font-weight: 700; color: #111827; }
+
+.cc-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cc-maps-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  width: 70%;
+  margin-left: 20px;
+}
+
+.cc-maps-btn:hover {
+  background: #f8fafc;
+}
+
+.maps-text-tablet, .maps-text-mobile { display: none; }
+.maps-text-desktop { display: inline; }
+
+/* ─── TABLET LAYOUT (768px - 1024px) ─── */
+@media (max-width: 1024px) {
+  .college-card { padding: 22px;}
+  .cc-name { font-size: 20px; }
+  .cc-grid { gap: 16px; }
+  .cc-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: auto;}
+  .cc-stats-grid { gap: 24px; padding: 14px 0; margin-bottom: 14px; margin-left: 70px;}
+  .maps-text-desktop { display: none;}
+  .maps-text-tablet { display: inline; }
+}
+
+/* ─── MOBILE LAYOUT (<768px) ─── */
+@media (max-width: 767px) {
+  .college-card { padding: 30px; }
+  
+  .cc-grid {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cc-progress {
+    height: 20px;
+  }
+
+  .cc-header {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 50px;
+  }
+  
+  .cc-title-wrapper {
+    
+  }
+
+  .cc-badge {
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    margin-left: 0;
+  }
+
+  .cc-name {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .cc-code {
+
+  }
+
+  .cc-details {
+    flex-direction: column;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-left: 10px;
+  }
+
+  .cc-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    margin-left: 20px;
+  }
+
+  .cc-actions {
+    width: 100%;
+  }
+
+  .cc-maps-btn {
+    width: 100%;
+    height: 48px;
+  }
+  
+  .maps-text-tablet { display: none; }
+  .maps-text-mobile { display: inline; }
 }

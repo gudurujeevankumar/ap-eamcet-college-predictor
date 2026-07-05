@@ -44,7 +44,9 @@ import {
 } from "recharts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
+import GoogleMapsButton from "./components/GoogleMapsButton";
+import FAQ from "./components/FAQ";
+import Footer from "./components/Footer";
 // Custom Brand Icons
 const InstagramIcon = ({ size = 18, color = "currentColor" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -150,18 +152,15 @@ function CircularProgress({ value, size = 64, strokeWidth = 6, level }) {
 // COLLEGE CARD COMPONENT
 // ─────────────────────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────
+// PREDICTION CARD LAYOUT (UNIFIED CSS GRID/FLEX)
+// ─────────────────────────────────────────────────────────────
+
 function CollegeCard({ prediction, index }) {
-  const [expanded, setExpanded] = useState(false);
-  const {
-    college,
-    probability,
-    chanceLevel,
-    rankGap,
-    closingRank,
-    scores,
-    insight,
-    counselingRounds,
-  } = prediction;
+  const { chanceLevel, rankGap, closingRank, college, probability } = prediction;
+
+  const chanceLevelStr = chanceLevel === "best-fit" ? "BEST FIT" : chanceLevel === "high" ? "HIGH" : chanceLevel === "medium" ? "MEDIUM" : "LOW";
+  const chanceColor = chanceLevel === "best-fit" ? "#10b981" : chanceLevel === "high" ? "#3b82f6" : chanceLevel === "medium" ? "#f59e0b" : "#ef4444";
 
   return (
     <motion.div
@@ -170,292 +169,66 @@ function CollegeCard({ prediction, index }) {
       transition={{ delay: index * 0.05, duration: 0.4 }}
       className={`college-card ${chanceLevel}`}
     >
-      <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
-        <CircularProgress value={probability} level={chanceLevel} />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              flexWrap: "wrap",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "16px",
-                fontWeight: 700,
-                color: "#0f172a",
-                margin: 0,
-              }}
-            >
-              {college.collegeName}
-            </h3>
-            <span className={`chance-badge ${chanceLevel}`}>
-              {chanceLevel === "best-fit"
-                ? "★ Best Fit"
-                : chanceLevel === "high"
-                ? "✓ High Chance"
-                : chanceLevel === "medium"
-                  ? "~ Fair Chance"
-                  : "✗ Low Chance"}
-            </span>
-          </div>
-          
-          <div style={{ marginTop: "6px", fontSize: "13px", color: "#64748b", display: "flex", alignItems: "center", gap: "6px" }}>
-             <Hash size={14} /> <span style={{fontWeight: 600}}>Code:</span> {college.instCode}
+      <div className="cc-grid">
+        <div className="cc-progress">
+          <CircularProgress value={probability} level={chanceLevel} />
+        </div>
+        
+        <div className="cc-content">
+          <div className="cc-header">
+            <div className="cc-title-wrapper">
+              <div className="cc-code">[{college.instCode}]</div>
+              <h3 className="cc-name">{college.collegeName}</h3>
+            </div>
+            <div className="cc-badge" style={{ backgroundColor: chanceColor }}>
+              {chanceLevelStr}
+            </div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              marginTop: "8px",
-              flexWrap: "wrap",
-              fontSize: "13px",
-              color: "#64748b",
-            }}
-          >
-            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <BookOpen size={14} /> {college.branchName}
-            </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <MapPin size={14} /> {college.districtFull}, {college.place}
-            </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <IndianRupee size={14} /> ₹{college.fee?.toLocaleString()}
-            </span>
-            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <Building2 size={14} /> {college.type}
-            </span>
+          <div className="cc-details">
+            <div className="cc-detail-item"><BookOpen size={14}/><span>{college.branchName}</span></div>
+            <div className="cc-detail-item"><MapPin size={14}/><span>{college.districtFull}, {college.place}</span></div>
+            <div className="cc-detail-item"><IndianRupee size={14}/><span>₹{college.fee?.toLocaleString()}</span></div>
+            <div className="cc-detail-item"><Building2 size={14}/><span>{college.type}</span></div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "24px",
-              marginTop: "12px",
-              fontSize: "13px",
-            }}
-          >
-            <div>
-              <span style={{ color: "#94a3b8" }}>Closing Rank</span>
-              <div style={{ fontWeight: 700, color: "#0f172a" }}>
-                {closingRank?.toLocaleString()}
-              </div>
+          <div className="cc-stats-grid">
+            <div className="c-stat-box">
+              <span className="c-stat-label">Closing Rank</span>
+              <span className="c-stat-val">{closingRank?.toLocaleString()}</span>
             </div>
-            <div>
-              <span style={{ color: "#94a3b8" }}>Rank Gap</span>
-              <div
-                style={{
-                  fontWeight: 700,
-                  color: rankGap > 0 ? "#10b981" : "#f43f5e",
-                }}
-              >
-                {rankGap > 0 ? "+" : ""}
-                {rankGap?.toLocaleString()}
-              </div>
+            <div className="c-stat-box">
+              <span className="c-stat-label">Rank Gap</span>
+              <span className="c-stat-val" style={{ color: rankGap > 0 ? "#10b981" : "#f43f5e" }}>
+                {rankGap > 0 ? "+" : ""}{rankGap?.toLocaleString()}
+              </span>
             </div>
-            <div>
-              <span style={{ color: "#94a3b8" }}>Affiliation</span>
-              <div style={{ fontWeight: 600, color: "#0f172a" }}>
-                {college.affiliation}
-              </div>
+            <div className="c-stat-box">
+              <span className="c-stat-label">Affiliation</span>
+              <span className="c-stat-val">{college.affiliation}</span>
             </div>
-            <div>
-              <span style={{ color: "#94a3b8" }}>Est.</span>
-              <div style={{ fontWeight: 600, color: "#0f172a" }}>
-                {college.established}
-              </div>
+            <div className="c-stat-box">
+              <span className="c-stat-label">Est.</span>
+              <span className="c-stat-val">{college.established}</span>
             </div>
+          </div>
+
+          <div className="cc-actions">
+            <GoogleMapsButton
+              collegeName={college.collegeName}
+              place={college.place}
+              districtFull={college.districtFull}
+              instCode={college.instCode}
+              branchName={college.branchName}
+            />
           </div>
         </div>
       </div>
-
-      {/* Expandable section */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          marginTop: "12px",
-          background: "none",
-          border: "none",
-          color: "#3b82f6",
-          fontSize: "13px",
-          fontWeight: 600,
-          cursor: "pointer",
-          fontFamily: "Inter, sans-serif",
-          padding: "4px 0",
-        }}
-      >
-        <Lightbulb size={14} />
-        AI Insight & Analysis
-        <ChevronDown
-          size={14}
-          style={{
-            transform: expanded ? "rotate(180deg)" : "none",
-            transition: "transform 0.2s",
-          }}
-        />
-      </button>
-
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{ overflow: "hidden" }}
-          >
-            <div className="insight-box" style={{ marginTop: "8px" }}>
-              <p
-                style={{
-                  fontSize: "13px",
-                  color: "#475569",
-                  lineHeight: 1.6,
-                  margin: 0,
-                }}
-              >
-                <Sparkles
-                  size={14}
-                  style={{
-                    display: "inline",
-                    verticalAlign: "middle",
-                    marginRight: "6px",
-                    color: "#8b5cf6",
-                  }}
-                />
-                {insight}
-              </p>
-            </div>
-
-            {/* Score Breakdown */}
-            <div className="score-breakdown-grid">
-              {[
-                {
-                  label: "Rank Match",
-                  value: scores.rankSimilarity,
-                  color: "#3b82f6",
-                },
-                {
-                  label: "Fee Match",
-                  value: scores.feeMatch,
-                  color: "#10b981",
-                },
-                {
-                  label: "Location",
-                  value: scores.locationMatch,
-                  color: "#f59e0b",
-                },
-                {
-                  label: "Branch Pop.",
-                  value: scores.branchPopularity,
-                  color: "#8b5cf6",
-                },
-                {
-                  label: "Reputation",
-                  value: scores.collegeReputation,
-                  color: "#f43f5e",
-                },
-              ].map((s) => (
-                <div key={s.label} style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      color: "#94a3b8",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    {s.label}
-                  </div>
-                  <div className="progress-bar" style={{ marginBottom: "2px" }}>
-                    <div
-                      style={{
-                        width: `${s.value}%`,
-                        height: "100%",
-                        borderRadius: "4px",
-                        background: s.color,
-                        transition: "width 0.8s ease",
-                      }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 700,
-                      color: s.color,
-                    }}
-                  >
-                    {s.value}%
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Counseling Rounds */}
-            <div
-              style={{
-                marginTop: "12px",
-                padding: "12px",
-                background: "#f8fafc",
-                borderRadius: "8px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "#475569",
-                  marginBottom: "8px",
-                }}
-              >
-                <CalendarDays
-                  size={14}
-                  style={{
-                    display: "inline",
-                    verticalAlign: "middle",
-                    marginRight: "4px",
-                  }}
-                />
-                Counseling Round Probabilities
-              </div>
-              <div style={{ display: "flex", gap: "16px" }}>
-                {[
-                  { label: "Round 1", value: counselingRounds.round1 },
-                  { label: "Round 2", value: counselingRounds.round2 },
-                  { label: "Final", value: counselingRounds.finalPhase },
-                ].map((r) => (
-                  <div key={r.label} style={{ flex: 1 }}>
-                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>
-                      {r.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        color:
-                          r.value >= 80
-                            ? "#10b981"
-                            : r.value >= 50
-                              ? "#f59e0b"
-                              : "#f43f5e",
-                      }}
-                    >
-                      {r.value}%
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }
+
+
 
 // ─────────────────────────────────────────────────────────────
 // MAIN PAGE COMPONENT
@@ -608,10 +381,14 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isBotVisible, setIsBotVisible] = useState(false);
 
-  // Show bot after 5 seconds
+  // Layout state
+
+  // Show bot after 5 seconds only on desktop
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsBotVisible(true);
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+        setIsBotVisible(true);
+      }
     }, 5000);
     return () => clearTimeout(timer);
   }, []);
@@ -685,8 +462,8 @@ export default function Home() {
       // Scroll to results
       setTimeout(() => {
         document
-          .getElementById("results-section")
-          ?.scrollIntoView({ behavior: "smooth" });
+          .getElementById("results-toolbar")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
@@ -710,14 +487,31 @@ export default function Home() {
       predictions.push(...result.lowChance);
 
     if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      predictions = predictions.filter(
-        (p) =>
-          p.college.collegeName.toLowerCase().includes(q) ||
-          p.college.branchName.toLowerCase().includes(q) ||
-          p.college.districtFull.toLowerCase().includes(q) ||
-          p.college.place?.toLowerCase().includes(q),
-      );
+      const q = searchQuery.toLowerCase().trim();
+      predictions = predictions.filter((p) => {
+        const c = p.college;
+        const searchableText = [
+          c.instCode,
+          c.collegeCode,
+          c.code,
+          c.collegeName,
+          c.branchName,
+          c.branchCode,
+          c.districtFull,
+          c.district,
+          c.place,
+          c.affiliation,
+          c.university,
+          c.course,
+          c.type,
+          c.region
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        
+        return searchableText.includes(q);
+      });
     }
 
     return predictions;
@@ -947,7 +741,7 @@ export default function Home() {
       {/* ─── HERO SECTION ─── */}
       <section
         className="hero-bg hero-section-wrapper"
-        style={{ padding: "48px 24px 56px", position: "relative" }}
+        style={{ padding: "32px 24px 32px", position: "relative" }}
       >
         <div
           style={{
@@ -1045,25 +839,6 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="hero-content"
           >
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 16px",
-                borderRadius: "20px",
-                marginBottom: "16px",
-                background: "rgba(59, 130, 246, 0.15)",
-                border: "1px solid rgba(59, 130, 246, 0.2)",
-              }}
-            >
-              <Brain size={14} color="#60a5fa" />
-              <span
-                style={{ fontSize: "13px", color: "#93c5fd", fontWeight: 500 }}
-              >
-                Powered by Predictive Analytics & Machine Learning
-              </span>
-            </div>
             <h2
               style={{
                 fontSize: "clamp(28px, 5vw, 44px)",
@@ -1096,29 +871,88 @@ export default function Home() {
                 lineHeight: 1.6,
               }}
             >
-              Predict your admission probability across 271+ AP engineering
-              colleges using real cutoff data, intelligent scoring, and
-              personalized recommendations.
+              Predict admission probability using official historical cutoff data,
+              AI-powered analytics, and personalized college recommendations.
             </p>
           </motion.div>
+
+          {/* Feature Pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px",
+              margin: "32px auto 24px",
+              maxWidth: "750px"
+            }}
+          >
+            {[
+              { icon: <Brain size={14} />, text: "AI Powered Predictions" },
+              { icon: <MapPin size={14} />, text: "Google Maps" },
+              { icon: <Download size={14} />, text: "PDF Export" },
+              { icon: <BarChart3 size={14} />, text: "Official Historical Cutoffs" },
+            ].map((feature, idx) => (
+              <div
+                key={idx}
+                className="feature-pill"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "8px 16px",
+                  borderRadius: "9999px",
+                  background: "rgba(15, 23, 42, 0.6)",
+                  border: "1px solid rgba(51, 65, 85, 0.8)",
+                  backdropFilter: "blur(8px)",
+                  color: "#e2e8f0",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  cursor: "default"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
+                  e.currentTarget.style.background = "rgba(30, 41, 59, 0.8)";
+                  e.currentTarget.style.border = "1px solid rgba(96, 165, 250, 0.4)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(96, 165, 250, 0.15)";
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = "translateY(0) scale(1)";
+                  e.currentTarget.style.background = "rgba(15, 23, 42, 0.6)";
+                  e.currentTarget.style.border = "1px solid rgba(51, 65, 85, 0.8)";
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.color = "#e2e8f0";
+                }}
+              >
+                <span style={{ color: "#60a5fa" }}>{feature.icon}</span>
+                {feature.text}
+              </div>
+            ))}
+          </motion.div>
+
 
           {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
             className="hero-stats-grid"
           >
             {[
               {
-                icon: <Building2 size={18} />,
+                icon: <Building2 size={20} />,
                 value: "271+",
                 label: "Colleges",
               },
-              { icon: <BookOpen size={18} />, value: "69", label: "Branches" },
-              { icon: <MapPin size={18} />, value: "13", label: "Districts" },
+              { icon: <BookOpen size={20} />, value: "69", label: "Branches" },
+              { icon: <MapPin size={20} />, value: "13", label: "Districts" },
               {
-                icon: <Shield size={18} />,
+                icon: <Shield size={20} />,
                 value: "1565",
                 label: "Data Points",
               },
@@ -1126,29 +960,48 @@ export default function Home() {
               <div
                 key={i}
                 className="glass-card-dark"
-                style={{ padding: "16px", textAlign: "center" }}
+                style={{
+                  padding: "20px 16px",
+                  textAlign: "center",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  background: "linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)",
+                  border: "1px solid rgba(255, 255, 255, 0.05)"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = "0 10px 25px -5px rgba(0, 0, 0, 0.4)";
+                  e.currentTarget.style.border = "1px solid rgba(96, 165, 250, 0.2)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.border = "1px solid rgba(255, 255, 255, 0.05)";
+                }}
               >
-                <div
+                <motion.div
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   style={{
                     color: "#60a5fa",
-                    marginBottom: "6px",
+                    marginBottom: "12px",
                     display: "flex",
                     justifyContent: "center",
                   }}
                 >
                   {stat.icon}
-                </div>
+                </motion.div>
                 <div
-                  style={{ fontSize: "22px", fontWeight: 800, color: "white" }}
+                  style={{ fontSize: "26px", fontWeight: 800, color: "white", marginBottom: "4px" }}
                 >
                   {stat.value}
                 </div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "#94a3b8",
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
+                    fontWeight: 600
                   }}
                 >
                   {stat.label}
@@ -1164,7 +1017,7 @@ export default function Home() {
         className="form-section-wrapper"
         style={{
           maxWidth: "1200px",
-          margin: "24px auto 0",
+          margin: "-16px auto 0",
           padding: "0 24px",
           position: "relative",
           zIndex: 20,
@@ -1367,53 +1220,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ─── VIDEO TUTORIAL SECTION ─── */}
-      {!result && (
-        <section
-          style={{
-            maxWidth: "800px",
-            margin: "96px auto 0",
-            padding: "0 24px",
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
-            <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#0f172a" }}>
-              How to use this Predictor
-            </h2>
-            <p style={{ fontSize: "14px", color: "#64748b", marginTop: "8px" }}>
-              Watch this quick Telugu tutorial to understand how to get the most accurate college predictions based on your rank.
-            </p>
-          </div>
-          <div
-            style={{
-              position: "relative",
-              paddingBottom: "56.25%", /* 16:9 aspect ratio */
-              height: 0,
-              overflow: "hidden",
-              borderRadius: "16px",
-              boxShadow: "var(--shadow-elevated)",
-              border: "1px solid rgba(0,0,0,0.1)"
-            }}
-          >
-            <iframe
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                border: 0,
-              }}
-              src="https://www.youtube.com/embed/QNZ4iP0gZMI?start=255&end=400"
-              title="AP EAMCET College Predictor Tutorial"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        </section>
-      )}
+
 
       {/* ─── RESULTS SECTION ─── */}
       <AnimatePresence>
@@ -1703,7 +1510,7 @@ export default function Home() {
                 transition={{ duration: 0.3 }}
               >
                 {/* Filters */}
-                <div
+                <div id="results-toolbar"
                   style={{
                     display: "flex",
                     gap: "12px",
@@ -1833,6 +1640,26 @@ export default function Home() {
                       <p style={{ fontSize: "13px", color: "#94a3b8" }}>
                         Try adjusting your filters or search criteria
                       </p>
+                      <button
+                        onClick={() => {
+                          document
+                            .getElementById("results-toolbar")
+                            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                        style={{
+                          marginTop: "16px",
+                          padding: "10px 20px",
+                          background: "#3b82f6",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                        }}
+                      >
+                        Adjust Filters
+                      </button>
                     </div>
                   ) : (
                     (() => {
@@ -1848,6 +1675,7 @@ export default function Home() {
                               key={`${p.college.instCode}-${p.college.branchCode}-${i}`}
                               prediction={p}
                               index={i}
+                              
                             />
                           ))}
 
@@ -1867,8 +1695,8 @@ export default function Home() {
                                     Math.max(prev - 1, 1),
                                   );
                                   document
-                                    .getElementById("results-section")
-                                    ?.scrollIntoView({ behavior: "smooth" });
+                                    .getElementById("results-toolbar")
+                                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
                                 }}
                                 disabled={currentPage === 1}
                                 style={{
@@ -1911,8 +1739,8 @@ export default function Home() {
                                     ),
                                   );
                                   document
-                                    .getElementById("results-section")
-                                    ?.scrollIntoView({ behavior: "smooth" });
+                                    .getElementById("results-toolbar")
+                                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
                                 }}
                                 disabled={
                                   currentPage ===
@@ -2782,219 +2610,22 @@ export default function Home() {
             padding: "0 24px 64px",
           }}
         >
-          {/* Features */}
-          <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <h2 className="section-title">Why Use Our Predictor?</h2>
-            <p className="section-subtitle">
-              Powered by data science and real AP EAPCET cutoff data
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "20px",
-            }}
-          >
-            {[
-              {
-                icon: <Brain size={28} />,
-                color: "#3b82f6",
-                bg: "#eff6ff",
-                title: "AI-Powered Scoring",
-                desc: "Multi-factor scoring engine analyzing rank similarity, fee compatibility, location, and branch popularity",
-              },
-              {
-                icon: <BarChart3 size={28} />,
-                color: "#8b5cf6",
-                bg: "#f5f3ff",
-                title: "Data-Driven Analytics",
-                desc: "Interactive charts and visualizations showing cutoff trends, fee distribution, and competition analysis",
-              },
-              {
-                icon: <CalendarDays size={28} />,
-                color: "#10b981",
-                bg: "#f0fdf4",
-                title: "Counseling Simulator",
-                desc: "Simulate Round 1, Round 2, and Final Phase outcomes to plan your counseling strategy",
-              },
-              {
-                icon: <Sparkles size={28} />,
-                color: "#f59e0b",
-                bg: "#fffbeb",
-                title: "Personalized Insights",
-                desc: "AI-generated explanations for each college prediction with detailed score breakdowns",
-              },
-              {
-                icon: <Shield size={28} />,
-                color: "#f43f5e",
-                bg: "#fff1f2",
-                title: "Real Cutoff Data",
-                desc: "Built on official 2024 AP EAPCET cutoff data from 271+ colleges across 13 districts",
-              },
-              {
-                icon: <Zap size={28} />,
-                color: "#06b6d4",
-                bg: "#ecfeff",
-                title: "Instant Results",
-                desc: "No OTP, no login required. Get instant predictions with 3-tier probability classification",
-              },
-            ].map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                className="stat-card"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.1 }}
-              >
-                <div
-                  style={{
-                    width: "56px",
-                    height: "56px",
-                    borderRadius: "16px",
-                    background: feature.bg,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: feature.color,
-                    marginBottom: "16px",
-                  }}
-                >
-                  {feature.icon}
-                </div>
-                <h3
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 700,
-                    color: "#0f172a",
-                    margin: "0 0 8px",
-                  }}
-                >
-                  {feature.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "13px",
-                    color: "#64748b",
-                    lineHeight: 1.6,
-                    margin: 0,
-                  }}
-                >
-                  {feature.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
         </section>
       )}
 
-      {/* ─── FOOTER ─── */}
-      <footer
-        style={{
-          background: "#0f172a",
-          padding: "48px 24px 32px",
-          textAlign: "center",
-          color: "#94a3b8",
-          fontSize: "13px",
-          borderTop: "1px solid #1e293b",
-        }}
-      >
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          
-          {/* Creator Promotion Section */}
-          <div style={{
-            background: "linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
-            border: "1px solid rgba(59, 130, 246, 0.2)",
-            borderRadius: "16px",
-            padding: "32px",
-            marginBottom: "40px",
-            display: "inline-block",
-            maxWidth: "650px",
-            width: "100%",
-            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.5)"
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <img src="/profile.png" alt="Jeevan Kumar Guduru" style={{ width: "72px", height: "72px", borderRadius: "50%", border: "3px solid #60a5fa", objectFit: "cover", boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)" }} onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Jeevan+Kumar&background=2563eb&color=fff&size=128" }} />
-              <div style={{ textAlign: "left" }}>
-                <h3 style={{ color: "white", fontSize: "20px", fontWeight: "800", margin: "0 0 4px" }}>
-                  Did this tool help you? 🚀
-                </h3>
-                <span style={{ color: "#60a5fa", fontSize: "14px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Jeevan Kumar Guduru</span>
-              </div>
-            </div>
-            <p style={{ color: "#cbd5e1", fontSize: "15px", marginBottom: "24px", lineHeight: "1.6" }}>
-              I'm an educational content creator dedicated to helping students like you make the best career choices. Follow my socials for more insights, counseling tips, and updates!
-            </p>
-            
-            <div className="social-grid">
-              <a href="https://www.instagram.com/jeevankumarguduru_official?igsh=dHRhbjBwZHdkNmRx&utm_source=qr" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "10px", borderRadius: "10px", color: "white", textDecoration: "none", transition: "all 0.2s", fontWeight: "500" }} onMouseOver={e => {e.currentTarget.style.background="rgba(255,255,255,0.1)"; e.currentTarget.style.transform="translateY(-2px)"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform="none"}}>
-                <InstagramIcon size={18} color="#e1306c" /> Instagram
-              </a>
-              <a href="https://www.youtube.com/@JeevanKumarGuduru" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "10px", borderRadius: "10px", color: "white", textDecoration: "none", transition: "all 0.2s", fontWeight: "500" }} onMouseOver={e => {e.currentTarget.style.background="rgba(255,255,255,0.1)"; e.currentTarget.style.transform="translateY(-2px)"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform="none"}}>
-                <YoutubeIcon size={18} color="#ff0000" /> YouTube
-              </a>
-              <a href="https://www.linkedin.com/in/gudurujeevankumar/" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "10px", borderRadius: "10px", color: "white", textDecoration: "none", transition: "all 0.2s", fontWeight: "500" }} onMouseOver={e => {e.currentTarget.style.background="rgba(255,255,255,0.1)"; e.currentTarget.style.transform="translateY(-2px)"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform="none"}}>
-                <LinkedinIcon size={18} color="#0077b5" /> LinkedIn
-              </a>
-              <a href="mailto:jeevankumarguduru3@gmail.com" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "10px", borderRadius: "10px", color: "white", textDecoration: "none", transition: "all 0.2s", fontWeight: "500" }} onMouseOver={e => {e.currentTarget.style.background="rgba(255,255,255,0.1)"; e.currentTarget.style.transform="translateY(-2px)"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform="none"}}>
-                <Mail size={18} color="#ea4335" /> Email
-              </a>
-            </div>
-          </div>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              marginBottom: "12px",
-            }}
-          >
-            <GraduationCap size={20} color="#60a5fa" />
-            <span style={{ fontWeight: 700, color: "white", fontSize: "16px" }}>
-              AP EAPCET College Predictor 2025
-            </span>
-          </div>
-          <p style={{ margin: 0, marginBottom: "8px" }}>
-            Built with real 2024 cutoff data • 271 Colleges • 69 Branches • 13 Districts
-          </p>
-          <p style={{ margin: 0, fontSize: "12px", color: "#64748b", maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
-            Disclaimer: Predictions are based on historical data and algorithms.
-            Actual admissions may vary based on counseling dynamics.
-          </p>
-        </div>
-      </footer>
+
       
       {/* ─── FLOATING AI BOT ─── */}
-      <AnimatePresence>
-        {isBotVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            style={{
-              position: "fixed",
-              bottom: "24px",
-              right: "24px",
-              zIndex: 50,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              gap: "12px"
-            }}
-          >
-            {/* Chat Bubble */}
-            <div style={{
-              background: "white",
-              padding: "12px",
-              borderRadius: "12px 12px 4px 12px",
-              boxShadow: "0 10px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.1)",
-              border: "1px solid #e2e8f0",
-              maxWidth: "220px",
-              marginBottom: "4px"
-            }}>
+      <div className="ai-assistant-widget">
+        <AnimatePresence>
+          {isBotVisible && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              className="ai-assistant-bubble"
+            >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
                 <span style={{ fontWeight: 800, fontSize: "13px", color: "#0f172a", display: "flex", alignItems: "center", gap: "6px" }}>
                   <Sparkles size={12} color="#3b82f6" /> AI Assistant
@@ -3011,67 +2642,169 @@ export default function Home() {
                 <a href="https://www.youtube.com/@JeevanKumarGuduru" target="_blank" rel="noreferrer" style={{ background: "#ff0000", color: "white", width: "32px", height: "32px", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform="scale(1.1)"} onMouseOut={e => e.currentTarget.style.transform="scale(1)"}><YoutubeIcon size={14} /></a>
                 <a href="https://www.linkedin.com/in/gudurujeevankumar/" target="_blank" rel="noreferrer" style={{ background: "#0077b5", color: "white", width: "32px", height: "32px", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform="scale(1.1)"} onMouseOut={e => e.currentTarget.style.transform="scale(1)"}><LinkedinIcon size={14} /></a>
               </div>
-            </div>
-            
-            {/* Bot Avatar */}
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #2563eb, #8b5cf6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(37, 99, 235, 0.4)",
-              cursor: "pointer",
-              border: "2px solid white",
-              transition: "transform 0.2s"
-            }} 
-            onClick={() => setIsBotVisible(!isBotVisible)}
-            onMouseOver={e => e.currentTarget.style.transform="scale(1.05)"} 
-            onMouseOut={e => e.currentTarget.style.transform="scale(1)"}>
-              <span style={{ fontSize: "24px" }}>🤖</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      {/* ─── FLOATING AI BOT (Closed State) ─── */}
-      <AnimatePresence>
-        {!isBotVisible && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            style={{
-              position: "fixed",
-              bottom: "24px",
-              right: "24px",
-              zIndex: 50,
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div 
+          className="ai-assistant-trigger"
+          onClick={() => setIsBotVisible(!isBotVisible)}
+        >
+          <Sparkles size={20} />
+        </div>
+      </div>
+
+      {/* ─── NEW SAAS UI: FEATURES, FAQ, FOOTER ─── */}
+      <section style={{ maxWidth: "1200px", margin: "80px auto", padding: "0 24px" }}>
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 800, color: "#0f172a", margin: "0 0 16px" }}>
+            Why Choose Our Predictor
+          </h2>
+          <p style={{ fontSize: "16px", color: "#64748b", maxWidth: "700px", margin: "0 auto", lineHeight: 1.6 }}>
+            Built using official historical counselling data and intelligent AI prediction algorithms.
+          </p>
+        </div>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: "24px"
+        }}>
+          {[
+            { 
+              icon: <Brain size={24} />, 
+              title: "AI Powered Predictions", 
+              desc: "Analyze rank, category, gender, branch, district, fee, reservation, and historical cutoffs to generate personalized recommendations.",
+              bg: "linear-gradient(135deg, #eff6ff, #dbeafe)",
+              color: "#2563eb"
+            },
+            { 
+              icon: <Download size={24} />, 
+              title: "PDF Reports", 
+              desc: "Generate beautifully formatted reports containing colleges, chances, fees, cutoff ranks and recommendations.",
+              bg: "linear-gradient(135deg, #fffbeb, #fef3c7)",
+              color: "#d97706"
+            },
+            { 
+              icon: <MapPin size={24} />, 
+              title: "Google Maps Integration", 
+              desc: "Instantly locate every college using Google Maps before making your counselling decisions.",
+              bg: "linear-gradient(135deg, #fef2f2, #fee2e2)",
+              color: "#dc2626"
+            },
+            { 
+              icon: <BarChart3 size={24} />, 
+              title: "Historical Analytics", 
+              desc: "Study previous counselling trends, admission patterns, and competition using official historical cutoff data.",
+              bg: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
+              color: "#16a34a"
+            },
+            { 
+              icon: <Hash size={24} />, 
+              title: "College Code Search", 
+              desc: "Instantly find your dream college by searching for its official counselling code.",
+              bg: "linear-gradient(135deg, #faf5ff, #f3e8ff)",
+              color: "#9333ea"
+            },
+            { 
+              icon: <Zap size={24} />, 
+              title: "Instant Results", 
+              desc: "Generate predictions instantly. No Login. No OTP. No Registration.",
+              bg: "linear-gradient(135deg, #ecfeff, #cffafe)",
+              color: "#0891b2"
+            }
+          ].map((card, i) => (
+            <div key={i} className="saas-feature-card" style={{
+              padding: "32px 24px",
+              background: "#ffffff",
+              borderRadius: "20px",
+              border: "1px solid #f1f5f9",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+              cursor: "default"
             }}
-          >
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #2563eb, #8b5cf6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(37, 99, 235, 0.4)",
-              cursor: "pointer",
-              border: "2px solid white",
-              transition: "transform 0.2s"
-            }} 
-            onClick={() => setIsBotVisible(true)}
-            onMouseOver={e => e.currentTarget.style.transform="scale(1.1)"} 
-            onMouseOut={e => e.currentTarget.style.transform="scale(1)"}>
-              <span style={{ fontSize: "24px" }}>🤖</span>
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = "translateY(-6px)";
+              e.currentTarget.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)";
+              e.currentTarget.style.borderColor = "#e2e8f0";
+              const iconWrapper = e.currentTarget.querySelector('.icon-wrapper');
+              if (iconWrapper) iconWrapper.style.transform = "scale(1.1)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)";
+              e.currentTarget.style.borderColor = "#f1f5f9";
+              const iconWrapper = e.currentTarget.querySelector('.icon-wrapper');
+              if (iconWrapper) iconWrapper.style.transform = "scale(1)";
+            }}
+            >
+              <div className="icon-wrapper" style={{
+                width: "56px",
+                height: "56px",
+                borderRadius: "14px",
+                background: card.bg,
+                color: card.color,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "20px",
+                transition: "transform 0.25s ease"
+              }}>
+                {card.icon}
+              </div>
+              <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>
+                {card.title}
+              </h3>
+              <p style={{ fontSize: "14px", color: "#64748b", margin: 0, lineHeight: 1.6 }}>
+                {card.desc}
+              </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
+          ))}
+        </div>
+      </section>
+
+      <FAQ />
+
+      {/* ─── CREATOR CARD ─── */}
+      <section style={{ maxWidth: "1200px", margin: "0 auto 80px", padding: "0 24px", display: "flex", justifyContent: "center" }}>
+        <div style={{
+          background: "linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)",
+          border: "1px solid rgba(59, 130, 246, 0.2)",
+          borderRadius: "16px",
+          padding: "32px",
+          maxWidth: "650px",
+          width: "100%",
+          boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
+          textAlign: "center"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <img src="/profile.png" alt="Jeevan Kumar Guduru" style={{ width: "72px", height: "72px", borderRadius: "50%", border: "3px solid #60a5fa", objectFit: "cover", boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)" }} onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Jeevan+Kumar&background=2563eb&color=fff&size=128" }} />
+            <div style={{ textAlign: "left" }}>
+              <h3 style={{ color: "#0f172a", fontSize: "20px", fontWeight: "800", margin: "0 0 4px" }}>
+                Did this tool help you? 🚀
+              </h3>
+              <span style={{ color: "#3b82f6", fontSize: "14px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Jeevan Kumar Guduru</span>
+            </div>
+          </div>
+          <p style={{ color: "#475569", fontSize: "15px", marginBottom: "24px", lineHeight: "1.6" }}>
+            I'm an educational content creator dedicated to helping students like you make the best career choices. Follow my socials for more insights, counseling tips, and updates!
+          </p>
+          
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+            <a href="https://www.instagram.com/jeevankumarguduru_official?igsh=dHRhbjBwZHdkNmRx&utm_source=qr" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: "8px", background: "white", border: "1px solid #e2e8f0", padding: "10px 16px", borderRadius: "10px", color: "#334155", textDecoration: "none", transition: "all 0.2s", fontWeight: "500", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }} onMouseOver={e => {e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.1)"}} onMouseOut={e => {e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 4px rgba(0,0,0,0.05)"}}>
+              <InstagramIcon size={18} color="#e1306c" /> Instagram
+            </a>
+            <a href="https://www.youtube.com/@JeevanKumarGuduru" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: "8px", background: "white", border: "1px solid #e2e8f0", padding: "10px 16px", borderRadius: "10px", color: "#334155", textDecoration: "none", transition: "all 0.2s", fontWeight: "500", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }} onMouseOver={e => {e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.1)"}} onMouseOut={e => {e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 4px rgba(0,0,0,0.05)"}}>
+              <YoutubeIcon size={18} color="#ff0000" /> YouTube
+            </a>
+            <a href="https://www.linkedin.com/in/gudurujeevankumar/" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: "8px", background: "white", border: "1px solid #e2e8f0", padding: "10px 16px", borderRadius: "10px", color: "#334155", textDecoration: "none", transition: "all 0.2s", fontWeight: "500", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }} onMouseOver={e => {e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.1)"}} onMouseOut={e => {e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 4px rgba(0,0,0,0.05)"}}>
+              <LinkedinIcon size={18} color="#0077b5" /> LinkedIn
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </main>
   );
 }
