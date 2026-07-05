@@ -642,7 +642,6 @@ html, body, #root {
   position: relative;
   overflow: hidden;
   margin-bottom: 20px;
-  z-index: 3;
 }
 .college-card::before {
   content: "";
