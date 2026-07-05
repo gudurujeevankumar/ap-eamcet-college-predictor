@@ -153,14 +153,19 @@ function CircularProgress({ value, size = 64, strokeWidth = 6, level }) {
 // ─────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────
-// PREDICTION CARD LAYOUT (UNIFIED CSS GRID/FLEX)
+// COLLEGE CARD COMPONENT
 // ─────────────────────────────────────────────────────────────
 
 function CollegeCard({ prediction, index }) {
-  const { chanceLevel, rankGap, closingRank, college, probability } = prediction;
+  const {
+    college,
+    probability,
+    chanceLevel,
+    rankGap,
+    closingRank,
+  } = prediction;
 
-  const chanceLevelStr = chanceLevel === "best-fit" ? "BEST FIT" : chanceLevel === "high" ? "HIGH" : chanceLevel === "medium" ? "MEDIUM" : "LOW";
-  const chanceColor = chanceLevel === "best-fit" ? "#10b981" : chanceLevel === "high" ? "#3b82f6" : chanceLevel === "medium" ? "#f59e0b" : "#ef4444";
+  const affiliation = (college.affiliation || "").trim();
 
   return (
     <motion.div
@@ -169,66 +174,114 @@ function CollegeCard({ prediction, index }) {
       transition={{ delay: index * 0.05, duration: 0.4 }}
       className={`college-card ${chanceLevel}`}
     >
-      <div className="cc-grid">
-        <div className="cc-progress">
-          <CircularProgress value={probability} level={chanceLevel} />
-        </div>
-        
-        <div className="cc-content">
-          <div className="cc-header">
-            <div className="cc-title-wrapper">
-              <div className="cc-code">[{college.instCode}]</div>
-              <h3 className="cc-name">{college.collegeName}</h3>
+      <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
+        <CircularProgress value={probability} level={chanceLevel} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "16px",
+                fontWeight: 700,
+                color: "#0f172a",
+                margin: 0,
+              }}
+            >
+              {college.collegeName}
+            </h3>
+            <span className={`chance-badge ${chanceLevel}`}>
+              {chanceLevel === "best-fit"
+                ? "★ Best Fit"
+                : chanceLevel === "high"
+                ? "✓ High Chance"
+                : chanceLevel === "medium"
+                  ? "~ Fair Chance"
+                  : "✗ Low Chance"}
+            </span>
+          </div>
+          
+          <div style={{ marginTop: "6px", fontSize: "13px", color: "#64748b", display: "flex", alignItems: "center", gap: "6px" }}>
+             <Hash size={14} /> <span style={{fontWeight: 600}}>Code:</span> {college.instCode}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              marginTop: "8px",
+              flexWrap: "wrap",
+              fontSize: "13px",
+              color: "#64748b",
+            }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <BookOpen size={14} /> {college.branchName}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <MapPin size={14} /> {college.districtFull}, {college.place}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <IndianRupee size={14} /> ₹{college.fee?.toLocaleString()}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <Building2 size={14} /> {college.type}
+            </span>
+          </div>
+
+          <div className="cc-stats-container">
+            <div>
+              <span style={{ color: "#94a3b8" }}>Closing Rank</span>
+              <div style={{ fontWeight: 700, color: "#0f172a" }}>
+                {closingRank?.toLocaleString()}
+              </div>
             </div>
-            <div className="cc-badge" style={{ backgroundColor: chanceColor }}>
-              {chanceLevelStr}
+            <div>
+              <span style={{ color: "#94a3b8" }}>Rank Gap</span>
+              <div
+                style={{
+                  fontWeight: 700,
+                  color: rankGap > 0 ? "#10b981" : "#f43f5e",
+                }}
+              >
+                {rankGap > 0 ? "+" : ""}
+                {rankGap?.toLocaleString()}
+              </div>
+            </div>
+            {affiliation.length > 0 && (
+              <div>
+                <span style={{ color: "#94a3b8" }}>Affiliation</span>
+                <div style={{ fontWeight: 600, color: "#0f172a" }}>
+                  {affiliation}
+                </div>
+              </div>
+            )}
+            <div>
+              <span style={{ color: "#94a3b8" }}>Est.</span>
+              <div style={{ fontWeight: 600, color: "#0f172a" }}>
+                {college.established}
+              </div>
             </div>
           </div>
 
-          <div className="cc-details">
-            <div className="cc-detail-item"><BookOpen size={14}/><span>{college.branchName}</span></div>
-            <div className="cc-detail-item"><MapPin size={14}/><span>{college.districtFull}, {college.place}</span></div>
-            <div className="cc-detail-item"><IndianRupee size={14}/><span>₹{college.fee?.toLocaleString()}</span></div>
-            <div className="cc-detail-item"><Building2 size={14}/><span>{college.type}</span></div>
-          </div>
-
-          <div className="cc-stats-grid">
-            <div className="c-stat-box">
-              <span className="c-stat-label">Closing Rank</span>
-              <span className="c-stat-val">{closingRank?.toLocaleString()}</span>
-            </div>
-            <div className="c-stat-box">
-              <span className="c-stat-label">Rank Gap</span>
-              <span className="c-stat-val" style={{ color: rankGap > 0 ? "#10b981" : "#f43f5e" }}>
-                {rankGap > 0 ? "+" : ""}{rankGap?.toLocaleString()}
-              </span>
-            </div>
-            <div className="c-stat-box">
-              <span className="c-stat-label">Affiliation</span>
-              <span className="c-stat-val">{college.affiliation}</span>
-            </div>
-            <div className="c-stat-box">
-              <span className="c-stat-label">Est.</span>
-              <span className="c-stat-val">{college.established}</span>
-            </div>
-          </div>
-
-          <div className="cc-actions">
-            <GoogleMapsButton
-              collegeName={college.collegeName}
-              place={college.place}
-              districtFull={college.districtFull}
-              instCode={college.instCode}
-              branchName={college.branchName}
-            />
-          </div>
+          <GoogleMapsButton
+            collegeName={college.collegeName}
+            place={college.place}
+            districtFull={college.districtFull}
+            instCode={college.instCode}
+            branchName={college.branchName}
+          />
         </div>
       </div>
-    </motion.div>
+
+          </motion.div>
   );
 }
-
-
 
 // ─────────────────────────────────────────────────────────────
 // MAIN PAGE COMPONENT
@@ -710,11 +763,11 @@ export default function Home() {
           grid-template-columns: repeat(4, 1fr);
           gap: 12px;
           max-width: 600px;
-          margin: 0 auto 32px;
+          margin: 0 auto 16px;
         }
         .hero-content {
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 16px;
         }
         .analysis-stats-grid {
           display: grid;
@@ -727,9 +780,9 @@ export default function Home() {
           gap: 8px;
           margin-top: 12px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           .hero-stats-grid { display: none !important; }
-          .hero-content { margin-bottom: 24px !important; }
+          .hero-content { margin-bottom: 12px !important; }
           .analysis-stats-grid { grid-template-columns: repeat(2, 1fr); }
           .score-breakdown-grid { grid-template-columns: repeat(3, 1fr); }
           .tabs { flex-wrap: wrap; }
@@ -741,7 +794,7 @@ export default function Home() {
       {/* ─── HERO SECTION ─── */}
       <section
         className="hero-bg hero-section-wrapper"
-        style={{ padding: "32px 24px 32px", position: "relative" }}
+        style={{ padding: "16px 24px 16px", position: "relative" }}
       >
         <div
           style={{
@@ -757,14 +810,14 @@ export default function Home() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "40px",
+              marginBottom: "16px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <div
                 style={{
-                  width: "42px",
-                  height: "42px",
+                  width: "38px",
+                  height: "38px",
                   borderRadius: "12px",
                   background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
                   display: "flex",
@@ -772,7 +825,7 @@ export default function Home() {
                   justifyContent: "center",
                 }}
               >
-                <GraduationCap size={24} color="white" />
+                <GraduationCap size={20} color="white" />
               </div>
               <div>
                 <h1
@@ -844,7 +897,7 @@ export default function Home() {
                 fontSize: "clamp(28px, 5vw, 44px)",
                 fontWeight: 900,
                 color: "white",
-                margin: "0 0 12px",
+                margin: "0 0 4px",
                 letterSpacing: "-0.04em",
                 lineHeight: 1.15,
               }}
@@ -865,10 +918,14 @@ export default function Home() {
             <p
               style={{
                 fontSize: "16px",
-                color: "#94a3b8",
+                color: "#f1f5f9",
+                opacity: 1,
                 maxWidth: "600px",
+                width: "100%",
+                padding: "0 16px",
+                boxSizing: "border-box",
                 margin: "0 auto",
-                lineHeight: 1.6,
+                lineHeight: "1.6",
               }}
             >
               Predict admission probability using official historical cutoff data,
@@ -1035,7 +1092,7 @@ export default function Home() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "24px",
+              marginBottom: "16px",
             }}
           >
             <div>
@@ -1412,7 +1469,7 @@ export default function Home() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "24px",
+                marginBottom: "16px",
                 flexWrap: "wrap",
                 gap: "16px",
               }}
@@ -2655,7 +2712,7 @@ export default function Home() {
       </div>
 
       {/* ─── NEW SAAS UI: FEATURES, FAQ, FOOTER ─── */}
-      <section style={{ maxWidth: "1200px", margin: "80px auto", padding: "0 24px" }}>
+      <section style={{ maxWidth: "1200px", margin: "40px auto 48px", padding: "0 24px" }}>
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <h2 style={{ fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 800, color: "#0f172a", margin: "0 0 16px" }}>
             Why Choose Our Predictor
@@ -2715,7 +2772,7 @@ export default function Home() {
             }
           ].map((card, i) => (
             <div key={i} className="saas-feature-card" style={{
-              padding: "32px 24px",
+              padding: "24px 20px",
               background: "#ffffff",
               borderRadius: "20px",
               border: "1px solid #f1f5f9",
@@ -2739,8 +2796,8 @@ export default function Home() {
             }}
             >
               <div className="icon-wrapper" style={{
-                width: "56px",
-                height: "56px",
+                width: "48px",
+                height: "48px",
                 borderRadius: "14px",
                 background: card.bg,
                 color: card.color,
@@ -2763,22 +2820,22 @@ export default function Home() {
         </div>
       </section>
 
-      <FAQ />
+      <div style={{ marginBottom: "48px" }}><FAQ /></div>
 
       {/* ─── CREATOR CARD ─── */}
-      <section style={{ maxWidth: "1200px", margin: "0 auto 80px", padding: "0 24px", display: "flex", justifyContent: "center" }}>
+      <section style={{ maxWidth: "1200px", margin: "0 auto 40px", padding: "0 24px", display: "flex", justifyContent: "center" }}>
         <div style={{
           background: "linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)",
           border: "1px solid rgba(59, 130, 246, 0.2)",
           borderRadius: "16px",
-          padding: "32px",
+          padding: "24px",
           maxWidth: "650px",
           width: "100%",
           boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
           textAlign: "center"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <img src="/profile.png" alt="Jeevan Kumar Guduru" style={{ width: "72px", height: "72px", borderRadius: "50%", border: "3px solid #60a5fa", objectFit: "cover", boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)" }} onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Jeevan+Kumar&background=2563eb&color=fff&size=128" }} />
+            <img src="/profile.png" alt="Jeevan Kumar Guduru" style={{ width: "56px", height: "56px", borderRadius: "50%", border: "3px solid #60a5fa", objectFit: "cover", boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)" }} onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Jeevan+Kumar&background=2563eb&color=fff&size=128" }} />
             <div style={{ textAlign: "left" }}>
               <h3 style={{ color: "#0f172a", fontSize: "20px", fontWeight: "800", margin: "0 0 4px" }}>
                 Did this tool help you? 🚀
@@ -2786,7 +2843,7 @@ export default function Home() {
               <span style={{ color: "#3b82f6", fontSize: "14px", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Jeevan Kumar Guduru</span>
             </div>
           </div>
-          <p style={{ color: "#475569", fontSize: "15px", marginBottom: "24px", lineHeight: "1.6" }}>
+          <p style={{ color: "#475569", fontSize: "15px", marginBottom: "16px", lineHeight: "1.6" }}>
             I'm an educational content creator dedicated to helping students like you make the best career choices. Follow my socials for more insights, counseling tips, and updates!
           </p>
           

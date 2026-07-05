@@ -27,8 +27,7 @@ export default function GoogleMapsButton({ collegeName, place, districtFull, ins
     >
       <MapPin size={14} /> 
       <span className="maps-text-desktop">View on Google Maps</span>
-      <span className="maps-text-tablet">View Maps</span>
-      <span className="maps-text-mobile">Open in Google Maps</span>
+      <span className="maps-text-mobile">Open Maps</span>
     </a>
   );
 }

@@ -236,6 +236,29 @@ body {
 }
 
 /* ─── College Card ─── */
+.college-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.college-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+.college-card.best-fit::before { background: #8b5cf6; }
+.college-card.high::before { background: #10b981; }
+.college-card.medium::before { background: #f59e0b; }
+.college-card.low::before { background: #f43f5e; }
 
 /* ─── Progress Bar ─── */
 .progress-bar {
@@ -592,7 +615,7 @@ body {
   margin-top: 12px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .section-title { font-size: 20px; }
   .stat-card { padding: 16px; }
   .college-card { padding: 16px; }
@@ -621,203 +644,5 @@ body {
 @media (max-width: 500px) {
   .social-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────
-   FINAL RESPONSIVE UX PREDICTION CARDS (UNIFIED CSS REFACTOR)
-   ───────────────────────────────────────────────────────────── */
-html, body, #root {
-  overflow-x: hidden;
-  max-width: 100%;
-}
-
-.college-card {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-.college-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 4px;
-  border-radius: 4px 0 0 4px;
-}
-.college-card.best-fit::before { background: #8b5cf6; }
-.college-card.high::before { background: #10b981; }
-.college-card.medium::before { background: #f59e0b; }
-.college-card.low::before { background: #f43f5e; }
-
-/* ─── Progress Bar ─── */
-.progress-bar {
-  height: 8px;
-  border-radius: 4px;
-  background: var(--navy-200);
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.progress-fill.high {
-  background: var(--gradient-high);
-}
-
-.progress-fill.medium {
-  background: var(--gradient-medium);
-}
-
-.progress-fill.low {
-  background: var(--gradient-low);
-}
-
-/* ─── Badge ─── */
-.chance-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 1px solid transparent;
-}
-.chance-badge.best-fit {
-  background: #ede9fe;
-  color: #7c3aed;
-  border-color: #ddd6fe;
-}
-.chance-badge.high {
-  background: #ecfdf5;
-  color: #059669;
-  border-color: #d1fae5;
-}
-
-.chance-badge.medium {
-  background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
-}
-
-.chance-badge.low {
-  background: rgba(244, 63, 94, 0.1);
-  color: #dc2626;
-}
-
-/* ─── Google Maps Button ─── */
-.cc-maps-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  background: white;
-  border: 1px solid #d1d5db;
-  color: #111827;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-  width: 100%;
-  margin-top: 16px;
-  white-space: nowrap;
-  font-size: 15px;
-}
-
-.cc-maps-btn:hover {
-  background: #f8fafc;
-}
-
-.maps-text-mobile { display: none; }
-.maps-text-desktop { display: inline; }
-
-
-@media (max-width: 767px) {
-  .maps-text-desktop { display: none; }
-  .maps-text-mobile { display: inline; }
-}
-
-
-/* ─── Bug Fixes: Stats Grid & AI Assistant ─── */
-.cc-stats-container {
-  display: flex;
-  gap: 24px;
-  margin-top: 12px;
-  font-size: 13px;
-}
-
-@media (max-width: 767px) {
-  .cc-stats-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-}
-
-.ai-assistant-widget {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.ai-assistant-bubble {
-  background: white;
-  padding: 12px;
-  border-radius: 12px 12px 12px 4px;
-  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.1);
-  border: 1px solid #e2e8f0;
-  max-width: 220px;
-  margin-bottom: 4px;
-}
-
-.ai-assistant-trigger {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #8b5cf6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-  cursor: pointer;
-  border: 2px solid white;
-  transition: transform 0.2s;
-  color: white;
-}
-
-.ai-assistant-trigger:hover {
-  transform: scale(1.1);
-}
-
-@media (max-width: 1024px) {
-  .ai-assistant-widget {
-    bottom: 24px;
-    left: 20px;
-  }
-}
-
-@media (max-width: 767px) {
-  .ai-assistant-widget {
-    bottom: calc(30px + env(safe-area-inset-bottom));
-    left: 20px;
   }
 }

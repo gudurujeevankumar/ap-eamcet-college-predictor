@@ -1,0 +1,306 @@
+function CollegeCard({ prediction, index }) {
+  const [expanded, setExpanded] = useState(false);
+  const {
+    college,
+    probability,
+    chanceLevel,
+    rankGap,
+    closingRank,
+    scores,
+    insight,
+    counselingRounds,
+  } = prediction;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.4 }}
+      className={`college-card ${chanceLevel}`}
+    >
+      <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
+        <CircularProgress value={probability} level={chanceLevel} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "16px",
+                fontWeight: 700,
+                color: "#0f172a",
+                margin: 0,
+              }}
+            >
+              {college.collegeName}
+            </h3>
+            <span className={`chance-badge ${chanceLevel}`}>
+              {chanceLevel === "best-fit"
+                ? "★ Best Fit"
+                : chanceLevel === "high"
+                ? "✓ High Chance"
+                : chanceLevel === "medium"
+                  ? "~ Fair Chance"
+                  : "✗ Low Chance"}
+            </span>
+          </div>
+          
+          <div style={{ marginTop: "6px", fontSize: "13px", color: "#64748b", display: "flex", alignItems: "center", gap: "6px" }}>
+             <Hash size={14} /> <span style={{fontWeight: 600}}>Code:</span> {college.instCode}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              marginTop: "8px",
+              flexWrap: "wrap",
+              fontSize: "13px",
+              color: "#64748b",
+            }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <BookOpen size={14} /> {college.branchName}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <MapPin size={14} /> {college.districtFull}, {college.place}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <IndianRupee size={14} /> ₹{college.fee?.toLocaleString()}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <Building2 size={14} /> {college.type}
+            </span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              marginTop: "12px",
+              fontSize: "13px",
+            }}
+          >
+            <div>
+              <span style={{ color: "#94a3b8" }}>Closing Rank</span>
+              <div style={{ fontWeight: 700, color: "#0f172a" }}>
+                {closingRank?.toLocaleString()}
+              </div>
+            </div>
+            <div>
+              <span style={{ color: "#94a3b8" }}>Rank Gap</span>
+              <div
+                style={{
+                  fontWeight: 700,
+                  color: rankGap > 0 ? "#10b981" : "#f43f5e",
+                }}
+              >
+                {rankGap > 0 ? "+" : ""}
+                {rankGap?.toLocaleString()}
+              </div>
+            </div>
+            <div>
+              <span style={{ color: "#94a3b8" }}>Affiliation</span>
+              <div style={{ fontWeight: 600, color: "#0f172a" }}>
+                {college.affiliation}
+              </div>
+            </div>
+            <div>
+              <span style={{ color: "#94a3b8" }}>Est.</span>
+              <div style={{ fontWeight: 600, color: "#0f172a" }}>
+                {college.established}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Expandable section */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          marginTop: "12px",
+          background: "none",
+          border: "none",
+          color: "#3b82f6",
+          fontSize: "13px",
+          fontWeight: 600,
+          cursor: "pointer",
+          fontFamily: "Inter, sans-serif",
+          padding: "4px 0",
+        }}
+      >
+        <Lightbulb size={14} />
+        AI Insight & Analysis
+        <ChevronDown
+          size={14}
+          style={{
+            transform: expanded ? "rotate(180deg)" : "none",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="insight-box" style={{ marginTop: "8px" }}>
+              <p
+                style={{
+                  fontSize: "13px",
+                  color: "#475569",
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                <Sparkles
+                  size={14}
+                  style={{
+                    display: "inline",
+                    verticalAlign: "middle",
+                    marginRight: "6px",
+                    color: "#8b5cf6",
+                  }}
+                />
+                {insight}
+              </p>
+            </div>
+
+            {/* Score Breakdown */}
+            <div className="score-breakdown-grid">
+              {[
+                {
+                  label: "Rank Match",
+                  value: scores.rankSimilarity,
+                  color: "#3b82f6",
+                },
+                {
+                  label: "Fee Match",
+                  value: scores.feeMatch,
+                  color: "#10b981",
+                },
+                {
+                  label: "Location",
+                  value: scores.locationMatch,
+                  color: "#f59e0b",
+                },
+                {
+                  label: "Branch Pop.",
+                  value: scores.branchPopularity,
+                  color: "#8b5cf6",
+                },
+                {
+                  label: "Reputation",
+                  value: scores.collegeReputation,
+                  color: "#f43f5e",
+                },
+              ].map((s) => (
+                <div key={s.label} style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#94a3b8",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    {s.label}
+                  </div>
+                  <div className="progress-bar" style={{ marginBottom: "2px" }}>
+                    <div
+                      style={{
+                        width: `${s.value}%`,
+                        height: "100%",
+                        borderRadius: "4px",
+                        background: s.color,
+                        transition: "width 0.8s ease",
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: 700,
+                      color: s.color,
+                    }}
+                  >
+                    {s.value}%
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Counseling Rounds */}
+            <div
+              style={{
+                marginTop: "12px",
+                padding: "12px",
+                background: "#f8fafc",
+                borderRadius: "8px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: "#475569",
+                  marginBottom: "8px",
+                }}
+              >
+                <CalendarDays
+                  size={14}
+                  style={{
+                    display: "inline",
+                    verticalAlign: "middle",
+                    marginRight: "4px",
+                  }}
+                />
+                Counseling Round Probabilities
+              </div>
+              <div style={{ display: "flex", gap: "16px" }}>
+                {[
+                  { label: "Round 1", value: counselingRounds.round1 },
+                  { label: "Round 2", value: counselingRounds.round2 },
+                  { label: "Final", value: counselingRounds.finalPhase },
+                ].map((r) => (
+                  <div key={r.label} style={{ flex: 1 }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>
+                      {r.label}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        color:
+                          r.value >= 80
+                            ? "#10b981"
+                            : r.value >= 50
+                              ? "#f59e0b"
+                              : "#f43f5e",
+                      }}
+                    >
+                      {r.value}%
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}

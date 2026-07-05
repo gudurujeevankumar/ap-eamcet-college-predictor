@@ -19,7 +19,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer style={{ background: "#0f172a", color: "#e2e8f0", paddingTop: "48px", paddingBottom: "24px", marginTop: "0" }}>
+    <footer style={{ background: "#0f172a", color: "#e2e8f0", paddingTop: "32px", paddingBottom: "24px", marginTop: "0" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
         
         {/* Disclaimer Section */}
